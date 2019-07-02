@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Cell, Colors, Grid } from 'react-foundation';
 import CampaignSettings from "./campaignsettings";
 import Pacing from "../pacing/pacing";
@@ -6,13 +6,7 @@ import Targeting from "../targeting/targeting";
 
 function Campaign({ match }) {
 
-  const [ view, setView ] = useState({
-    view: 'settings'
-  });
-
-  const changeView = (v) => {
-    setView(v);
-  };
+  const [ view, setView ] = useState('settings');
 
   return (
     <div>
@@ -20,13 +14,13 @@ function Campaign({ match }) {
       <p>Create campaigns to manage collections of creatives.</p>
       <Grid>
         <Cell small={ 3 } large={ 3 }>
-          <Button color={ Colors.SUCCESS } onClick={ changeView.bind(null, 'settings') }>Settings</Button>
+          <Button color={ Colors.SUCCESS } onClick={ setView.bind(null, 'settings') }>Settings</Button>
         </Cell>
         <Cell small={ 3 } large={ 3 }>
-          <Button color={ Colors.SUCCESS } onClick={ changeView.bind(null, 'pacing') }>Pacing</Button>
+          <Button color={ Colors.SUCCESS } onClick={ setView.bind(null, 'pacing') }>Pacing</Button>
         </Cell>
         <Cell small={ 3 } large={ 3 }>
-          <Button color={ Colors.SUCCESS } onClick={ changeView.bind(null, 'targeting') }>Targeting</Button>
+          <Button color={ Colors.SUCCESS } onClick={ setView.bind(null, 'targeting') }>Targeting</Button>
         </Cell>
       </Grid>
       <hr/>

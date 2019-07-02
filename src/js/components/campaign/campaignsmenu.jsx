@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Cell, Colors, Grid } from 'react-foundation';
 import { api, request } from "../../api/api";
+import { save } from "../../common/forminput";
 
 function CampaignsMenu() {
 
@@ -13,10 +14,6 @@ function CampaignsMenu() {
     setValues({ ...values, [ name ]: value });
   };
 
-  const handleSubmit = () => {
-    request(null, api.campaign.save, values);
-  };
-
   return (
     <div>
       <h3>Create New Campaign</h3>
@@ -27,7 +24,7 @@ function CampaignsMenu() {
         </Cell>
         <Cell small={ 12 } large={ 12 }>
           <input name={ 'name' } value={ values.name } onChange={ handleInputChange }/>
-          <Button color={ Colors.SUCCESS } onClick={ handleSubmit }>Create</Button>
+          <Button color={ Colors.SUCCESS } onClick={ save.bind(null, null, api.campaign.save, values) }>Create</Button>
         </Cell>
       </Grid>
       <h3>Manage Existing Campaigns</h3>

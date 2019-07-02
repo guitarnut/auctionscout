@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link as ReactLink } from 'react-router-dom';
 import { Callout, Colors, Link, Button, Switch, Sizes, Grid, Cell } from 'react-foundation';
 import { api, request } from '../../api/api';
+import { handleSwitchChange, save } from "../../common/forminput";
 import style from './targeting.scss';
 
 function Targeting({ match }) {
@@ -29,7 +30,7 @@ function Targeting({ match }) {
       return;
     }
     let array = values[ target ];
-    if(array.indexOf(value) === -1) {
+    if (array.indexOf(value) === -1) {
       array.push(value);
     }
     if (array.length > max) {
@@ -47,21 +48,13 @@ function Targeting({ match }) {
     setValues({ ...values, [ name ]: array });
   };
 
-  const handleSwitchChange = (name) => {
-    setValues({ ...values, [ name ]: !values[ name ] });
-  };
-
-  const handleSubmit = () => {
-    request(match.params.id, api.targeting.save, values);
-  };
-
   return (
     <div>
       <h3>Targeting</h3>
       <p>Set selection criteria for your item.</p>
       <Grid>
         <Cell small={ 4 } large={ 4 }>
-          <Button color={ Colors.SUCCESS }  onClick={ handleSubmit }>Save</Button>
+          <Button color={ Colors.SUCCESS } onClick={ save.bind(null, match.params.id, api.targeting.save, values) }>Save</Button>
         </Cell>
       </Grid>
       <form>
@@ -70,7 +63,7 @@ function Targeting({ match }) {
             <h5>User Match</h5>
           </Cell>
           <Cell small={ 2 } large={ 2 }>
-            <Switch input={ { defaultChecked: values.userMatch } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, 'userMatch') }/>
+            <Switch input={ { defaultChecked: values.userMatch } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, values, setValues, 'userMatch') }/>
           </Cell>
           <Cell small={ 10 } large={ 10 }>
             <p>This item requires a user cookie set by Auction Scout.</p>
@@ -81,7 +74,7 @@ function Targeting({ match }) {
             <h5>HTTPS</h5>
           </Cell>
           <Cell small={ 2 } large={ 2 }>
-            <Switch input={ { defaultChecked: values.secure } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, 'secure') }/>
+            <Switch input={ { defaultChecked: values.secure } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, values, setValues, 'secure') }/>
           </Cell>
           <Cell small={ 10 } large={ 10 }>
             <p>This item only accepts HTTPS requests.</p>
@@ -93,25 +86,25 @@ function Targeting({ match }) {
             <p>This item accepts the following inventory types.</p>
           </Cell>
           <Cell small={ 2 } large={ 2 }>
-            <Switch input={ { defaultChecked: values.desktop } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, 'desktop') }/>
+            <Switch input={ { defaultChecked: values.desktop } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, values, setValues, 'desktop') }/>
           </Cell>
           <Cell small={ 10 } large={ 10 }>
             <p>Desktop (PC browsers).</p>
           </Cell>
           <Cell small={ 2 } large={ 2 }>
-            <Switch input={ { defaultChecked: values.mobile } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, 'mobile') }/>
+            <Switch input={ { defaultChecked: values.mobile } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, values, setValues, 'mobile') }/>
           </Cell>
           <Cell small={ 10 } large={ 10 }>
             <p>Mobile (iPhone, Android, and tablets)</p>
           </Cell>
           <Cell small={ 2 } large={ 2 }>
-            <Switch input={ { defaultChecked: values.inapp } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, 'inapp') }/>
+            <Switch input={ { defaultChecked: values.inapp } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, values, setValues, 'inapp') }/>
           </Cell>
           <Cell small={ 10 } large={ 10 }>
             <p>InApp (iOS, Android, and Windows applications)</p>
           </Cell>
           <Cell small={ 2 } large={ 2 }>
-            <Switch input={ { defaultChecked: values.ctv } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, 'ctv') }/>
+            <Switch input={ { defaultChecked: values.ctv } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, values, setValues, 'ctv') }/>
           </Cell>
           <Cell small={ 10 } large={ 10 }>
             <p>Connected TV (Roku, etc)</p>
@@ -131,7 +124,7 @@ function Targeting({ match }) {
           <Cell small={ 12 } large={ 12 }>
             { values.dealIds.map(v => {
               return (
-                <Link key={v} color={ Colors.SUCCESS } onClick={removeItem.bind(null, 'dealIds', v)} isHollow>[x] {v}</Link>
+                <Link key={ v } color={ Colors.SUCCESS } onClick={ removeItem.bind(null, 'dealIds', v) } isHollow>[x] { v }</Link>
               )
             })
             }
@@ -151,7 +144,7 @@ function Targeting({ match }) {
           <Cell small={ 12 } large={ 12 }>
             { values.publisherWhitelist.map(v => {
               return (
-                <Link key={v} color={ Colors.SUCCESS } onClick={removeItem.bind(null, 'publisherWhitelist', v)} isHollow>[x] {v}</Link>
+                <Link key={ v } color={ Colors.SUCCESS } onClick={ removeItem.bind(null, 'publisherWhitelist', v) } isHollow>[x] { v }</Link>
               )
             })
             }
@@ -171,7 +164,7 @@ function Targeting({ match }) {
           <Cell small={ 12 } large={ 12 }>
             { values.publisherBlacklist.map(v => {
               return (
-                <Link key={v} color={ Colors.SUCCESS } onClick={removeItem.bind(null, 'publisherBlacklist', v)} isHollow>[x] {v}</Link>
+                <Link key={ v } color={ Colors.SUCCESS } onClick={ removeItem.bind(null, 'publisherBlacklist', v) } isHollow>[x] { v }</Link>
               )
             })
             }
@@ -191,7 +184,7 @@ function Targeting({ match }) {
           <Cell small={ 12 } large={ 12 }>
             { values.bundleWhitelist.map(v => {
               return (
-                <Link key={v} color={ Colors.SUCCESS } onClick={removeItem.bind(null, 'bundleWhitelist', v)} isHollow>[x] {v}</Link>
+                <Link key={ v } color={ Colors.SUCCESS } onClick={ removeItem.bind(null, 'bundleWhitelist', v) } isHollow>[x] { v }</Link>
               )
             })
             }
@@ -211,7 +204,7 @@ function Targeting({ match }) {
           <Cell small={ 12 } large={ 12 }>
             { values.bundleBlacklist.map(v => {
               return (
-                <Link key={v} color={ Colors.SUCCESS } onClick={removeItem.bind(null, 'bundleBlacklist', v)} isHollow>[x] {v}</Link>
+                <Link key={ v } color={ Colors.SUCCESS } onClick={ removeItem.bind(null, 'bundleBlacklist', v) } isHollow>[x] { v }</Link>
               )
             })
             }
@@ -231,7 +224,7 @@ function Targeting({ match }) {
           <Cell small={ 12 } large={ 12 }>
             { values.domainWhitelist.map(v => {
               return (
-                <Link key={v} color={ Colors.SUCCESS } onClick={removeItem.bind(null, 'domainWhitelist', v)} isHollow>[x] {v}</Link>
+                <Link key={ v } color={ Colors.SUCCESS } onClick={ removeItem.bind(null, 'domainWhitelist', v) } isHollow>[x] { v }</Link>
               )
             })
             }
@@ -251,7 +244,7 @@ function Targeting({ match }) {
           <Cell small={ 12 } large={ 12 }>
             { values.domainBlacklist.map(v => {
               return (
-                <Link key={v} color={ Colors.SUCCESS } onClick={removeItem.bind(null, 'domainBlacklist', v)} isHollow>[x] {v}</Link>
+                <Link key={ v } color={ Colors.SUCCESS } onClick={ removeItem.bind(null, 'domainBlacklist', v) } isHollow>[x] { v }</Link>
               )
             })
             }

@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Link as ReactLink } from 'react-router-dom';
-import { Callout, Button, Colors, Sizes, Grid, Cell } from 'react-foundation';
-import { api, request } from '../../api/api';
-import style from './pacing.scss';
+import React, { useEffect, useState } from 'react';
+import { Button, Callout, Cell, Colors, Grid, Sizes } from 'react-foundation';
+import { api } from '../../api/api';
+import { save } from "../../common/forminput";
 
 function Pacing({ match }) {
 
@@ -26,10 +25,6 @@ function Pacing({ match }) {
     setValues({ ...values, [ name ]: value });
   };
 
-  const handleSubmit = e => {
-    request(match.params.id, api.pacing.save, values);
-  };
-
   useEffect(
     () => {
       Object.keys(values).forEach(name => {
@@ -45,7 +40,7 @@ function Pacing({ match }) {
       <p>Set limits on the performance of your item.</p>
       <Grid>
         <Cell small={ 4 } large={ 4 }>
-          <Button color={ Colors.SUCCESS }  onClick={ handleSubmit }>Save</Button>
+          <Button color={ Colors.SUCCESS }  onClick={ save.bind(null, match.params.id, api.pacing.save, values) }>Save</Button>
         </Cell>
       </Grid>
       <form onSubmit={ (e) => {

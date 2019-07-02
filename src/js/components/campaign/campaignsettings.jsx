@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Cell, Colors, Grid, Sizes, Switch } from 'react-foundation';
-import { api, request } from '../../api/api';
+import { api } from '../../api/api';
+import { handleSwitchChange, save } from "../../common/forminput";
 
 function CampaignSettings({ match }) {
 
@@ -23,14 +24,6 @@ function CampaignSettings({ match }) {
     setValues({ ...values, [ name ]: value });
   };
 
-  const handleSwitchChange = (name) => {
-    setValues({ ...values, [ name ]: !values[ name ] });
-  };
-
-  const handleSubmit = () => {
-    request(match.params.id, api.campaign.save, values);
-  };
-
   useEffect(
     () => {
       Object.keys(values).forEach(name => {
@@ -49,7 +42,7 @@ function CampaignSettings({ match }) {
         <p>Reporting and auction behavior configuration for this item.</p>
         <Grid>
           <Cell small={ 4 } large={ 4 }>
-            <Button color={ Colors.SUCCESS }  onClick={ handleSubmit }>Save</Button>
+            <Button color={ Colors.SUCCESS } onClick={ save.bind(null, match.params.id, api.campaign.save, values) }>Save</Button>
           </Cell>
         </Grid>
         <Grid>
@@ -62,7 +55,7 @@ function CampaignSettings({ match }) {
         </Grid>
         <Grid>
           <Cell small={ 2 } large={ 2 }>
-            <Switch input={ { defaultChecked: values.enabled } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, 'enabled') }/>
+            <Switch input={ { defaultChecked: values.enabled } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, values, setValues, 'enabled') }/>
           </Cell>
           <Cell small={ 10 } large={ 10 }>
             <p>This item is currently active.</p>

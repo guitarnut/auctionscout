@@ -9,18 +9,8 @@ import Vast from "../vast/vast";
 
 function Creative({ match }) {
 
-  const [ values, setValues ] = useState({
-    view: 'settings',
-    type: ''
-  });
-
-  const changeView = (v) => {
-    setValues({ ...values, view: v });
-  };
-
-  const changeType = (v) => {
-    setValues({ ...values, type: v });
-  };
+  const [ type, setType ] = useState('');
+  const [ view, setView ] = useState('settings');
 
   return (
     <div>
@@ -28,29 +18,29 @@ function Creative({ match }) {
       <p>Create display and video media to include in your bid responses for client-side rendering.</p>
       <Grid>
         <Cell small={ 3 } large={ 3 }>
-          <Button color={ Colors.SUCCESS } onClick={ changeView.bind(null, 'settings') }>Settings</Button>
+          <Button color={ Colors.SUCCESS } onClick={ setView.bind(null, 'settings') }>Settings</Button>
         </Cell>
         <Cell small={ 3 } large={ 3 }>
-          <Button color={ Colors.SUCCESS } onClick={ changeView.bind(null, 'pacing') }>Pacing</Button>
+          <Button color={ Colors.SUCCESS } onClick={ setView.bind(null, 'pacing') }>Pacing</Button>
         </Cell>
         <Cell small={ 3 } large={ 3 }>
-          <Button color={ Colors.SUCCESS } onClick={ changeView.bind(null, 'targeting') }>Targeting</Button>
+          <Button color={ Colors.SUCCESS } onClick={ setView.bind(null, 'targeting') }>Targeting</Button>
         </Cell>
         <Cell small={ 3 } large={ 3 }>
-          <Button color={ Colors.SUCCESS } onClick={ changeView.bind(null, 'asset') }>Asset</Button>
+          <Button color={ Colors.SUCCESS } onClick={ setView.bind(null, 'asset') }>Asset</Button>
         </Cell>
       </Grid>
       <hr/>
-      { values.view === 'settings' &&
+      { view === 'settings' &&
       <CreativeSettings match={ match }/>
       }
-      { values.view === 'pacing' &&
+      { view === 'pacing' &&
       <Pacing match={ match }/>
       }
-      { values.view === 'targeting' &&
+      { view === 'targeting' &&
       <Targeting match={ match }/>
       }
-      { values.view === 'asset' &&
+      { view === 'asset' &&
       <div>
         <Grid>
           <Cell small={ 12 } large={ 12 }>
@@ -59,18 +49,18 @@ function Creative({ match }) {
           <Cell small={ 6 } large={ 6 }>
             <p><strong>Display</strong><br/>
               Media with JavaScript and HTML markup.</p>
-            <Button color={ Colors.SUCCESS } onClick={ changeType.bind(null, CreativeType.DISPLAY) }>Select</Button>
+            <Button color={ Colors.SUCCESS } onClick={ setType.bind(null, CreativeType.DISPLAY) }>Select</Button>
           </Cell>
           <Cell small={ 6 } large={ 6 }>
             <p><strong>Video</strong><br/>
               Video delivered using VAST/XML markup.</p>
-            <Button color={ Colors.SUCCESS } onClick={ changeType.bind(null, CreativeType.VAST) }>Select</Button>
+            <Button color={ Colors.SUCCESS } onClick={ setType.bind(null, CreativeType.VAST) }>Select</Button>
           </Cell>
         </Grid>
-        { values.type === CreativeType.DISPLAY &&
+        { type === CreativeType.DISPLAY &&
         <Display match={ match }/>
         }
-        { values.type === CreativeType.VAST &&
+        { type === CreativeType.VAST &&
         <Vast match={ match }/>
         }
       </div>
