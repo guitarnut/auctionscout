@@ -5,5 +5,5 @@ export const handleSwitchChange = (state, setter, name) => {
 };
 
 export const save = (id, endpoint, data) => {
-  request(id, endpoint, data);
+  return request(id, endpoint, data);
 };

@@ -1,16 +1,45 @@
-const endpoint = 'http://foo.com/api';
+import client from 'request';
+
+const endpoint = 'http://localhost:8080';
 const GET = 'GET';
 const POST = 'POST';
 const PUT = 'PUT';
 const DELETE = 'DELETE';
 const PATCH = 'PATCH';
 
-const execute = (p, data) => {
+const executePOST = (p, data) => {
+  return new Promise((success, fail) => {
+    client.post(
+      {
+        url: endpoint + p,
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      },
+      (e, resp, body) => {
+        if (e) {
+          fail();
+        } else {
+          success(JSON.parse(body));
+        }
+      }
+    )
+  });
+};
+
+const executeGET = (p, data) => {
   console.log(endpoint + p, data);
 };
 
+const executeDELETE = (p, data) => {
+  console.log(endpoint + p, data);
+};
+
+
 export const request = (id, config, data) => {
-  let path = id === undefined ? config.path : config.path + `/${id}`;
+  console.log(id);
+  let path = (id === undefined || id === null) ? config.path : config.path.replace('@__ID__@', id);
 
   if (config.method === GET) {
     if (data !== undefined) {
@@ -20,11 +49,11 @@ export const request = (id, config, data) => {
       });
       path = path.substr(0, path.length - 2);
     }
-    execute(path);
+    return executeGET(path);
   } else if (config.method === POST) {
-    execute(path, data);
+    return executePOST(path, data);
   } else if (config.method === DELETE) {
-    execute(path);
+    return executeDELETE(path);
   }
 };
 
@@ -32,100 +61,104 @@ export const api = {
   creative: {
     all: {
       method: GET,
-      path: '/creative/all'
+      path: '/api/creative/all'
     },
     get: {
       method: GET,
-      path: '/creative/view'
+      path: '/api/creative/view'
     },
     save: {
       method: POST,
-      path: '/creative/save'
+      path: '/api/creative/save'
     },
     remove: {
       method: DELETE,
-      path: '/creative/delete'
+      path: '/api/creative/delete'
     }
   },
 
   campaign: {
     all: {
       method: GET,
-      path: '/campaign/all'
+      path: '/api/campaign/all'
     },
     get: {
       method: GET,
-      path: '/campaign/view'
+      path: '/api/campaign/view'
     },
     save: {
       method: POST,
-      path: '/campaign/save'
+      path: `/api/campaign/@__ID__@/save`
+    },
+    create: {
+      method: POST,
+      path: '/api/campaign/create'
     },
     remove: {
       method: DELETE,
-      path: '/campaign/delete'
+      path: '/api/campaign/delete'
     }
   },
 
   display: {
     save: {
       method: POST,
-      path: '/display/save'
+      path: '/api/display/save'
     }
   },
 
   pacing: {
     get: {
       method: GET,
-      path: '/pacing/view'
+      path: '/api/pacing/view'
     },
     save: {
       method: POST,
-      path: '/pacing/save'
+      path: '/api/pacing/save'
     }
   },
 
   statistics: {
     get: {
       method: GET,
-      path: '/statistics/view'
+      path: '/api/statistics/view'
     },
     save: {
       method: POST,
-      path: '/statistics/save'
+      path: '/api/statistics/save'
     }
   },
 
   targeting: {
     get: {
       method: GET,
-      path: '/targeting/view'
+      path: '/api/targeting/view'
     },
     save: {
       method: POST,
-      path: '/targeting/save'
+      path: '/api/targeting/save'
     }
   },
 
   auctionrecord: {
     get: {
       method: GET,
-      path: '/targeting/view'
+      path: '/api/targeting/view'
     },
     remove: {
       method: DELETE,
-      path: '/targeting/save'
+      path: '/api/targeting/save'
     }
   },
 
   vastrecord: {
     get: {
       method: GET,
-      path: '/targeting/view'
+      path: '/api/targeting/view'
     },
     remove: {
       method: DELETE,
-      path: '/targeting/save'
+      path: '/api/targeting/save'
     }
   }
 };

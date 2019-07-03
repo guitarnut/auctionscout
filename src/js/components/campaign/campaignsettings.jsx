@@ -33,6 +33,16 @@ function CampaignSettings({ match }) {
     }, [ values ]
   );
 
+  const saveSettings = () => {
+    save(match.params.id, api.campaign.save, values)
+      .then(data => {
+        setValues({ ...values, ...data });
+      })
+      .catch(e => {
+        //
+      })
+  };
+
   return (
     <div>
       <form onSubmit={ (e) => {
@@ -42,7 +52,7 @@ function CampaignSettings({ match }) {
         <p>Reporting and auction behavior configuration for this item.</p>
         <Grid>
           <Cell small={ 4 } large={ 4 }>
-            <Button color={ Colors.SUCCESS } onClick={ save.bind(null, match.params.id, api.campaign.save, values) }>Save</Button>
+            <Button color={ Colors.SUCCESS } onClick={ saveSettings }>Save</Button>
           </Cell>
         </Grid>
         <Grid>
