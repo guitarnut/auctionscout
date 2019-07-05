@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Callout, Colors, Button, Badge, Sizes, Grid, Cell } from 'react-foundation';
 import style from './statistics.scss';
+import { request, api } from "../../api/api";
+import { Model } from "../../const";
 
-function Statistics() {
+function Statistics({ match, model }) {
 
   const [ values, setValues ] = useState({
     bids: 0,
@@ -18,59 +20,49 @@ function Statistics() {
     clicks: 0
   });
 
+  const reset = () => {
+    let endpoint = model === Model.CAMPAIGN ? api.campaign.statistics.reset : api.creative.statistics.reset;
+    request(match.params.id, endpoint, null)
+      .then(data => {
+        setValues(data.statistics)
+      })
+      .catch(e => {
+        //
+      })
+  };
+
+  useEffect(() => {
+    let endpoint = model === Model.CAMPAIGN ? api.campaign.get : api.creative.get;
+    request(match.params.id, endpoint, null)
+      .then(data => {
+        setValues(data.statistics)
+      })
+      .catch(e => {
+        //
+      })
+  }, []);
+
   return (
     <div>
       <Grid>
-        <Cell small={ 12 } large={ 12 }>
+        <Cell small={ 10 } large={ 10 }>
           <h3>Statistics</h3>
         </Cell>
-        <Cell small={ 12 } large={ 12 }>
-          <Button color={ Colors.ALERT }>Reset All</Button>
-        </Cell>
-        <Cell small={ 12 } large={ 12 }>
-          <h5>Bidder</h5>
-        </Cell>
         <Cell small={ 2 } large={ 2 }>
-          <Button color={ Colors.SUCCESS } isHollow>{ values.requests }</Button>
-        </Cell>
-        <Cell small={ 2 } large={ 2 }>
-          <Button color={ Colors.SUCCESS } isHollow>Bids: { values.bids }</Button>
-        </Cell>
-        <Cell small={ 2 } large={ 2 }>
-          <Button color={ Colors.SUCCESS } isHollow>NBR: { values.nbr }</Button>
+          <Button color={ Colors.ALERT } onClick={ reset }>Reset All</Button>
         </Cell>
         <Cell small={ 12 } large={ 12 }>
-          <h5>Impressions</h5>
-        </Cell>
-        <Cell small={ 2 } large={ 2 }>
-          <Button color={ Colors.SUCCESS } isHollow>Valid: { values.impressions }</Button>
-        </Cell>
-        <Cell small={ 2 } large={ 2 }>
-          <Button color={ Colors.SUCCESS } isHollow>Duplicate: { values.duplicateImpressions }</Button>
-        </Cell>
-        <Cell small={ 2 } large={ 2 }>
-          <Button color={ Colors.SUCCESS } isHollow>Expired: { values.expiredImpressions }</Button>
-        </Cell>
-        <Cell small={ 2 } large={ 2 }>
-          <Button color={ Colors.SUCCESS } isHollow>Invalid: { values.invalidImpressions }</Button>
-        </Cell>
-        <Cell small={ 12 } large={ 12 }>
-          <h5>Spend</h5>
-        </Cell>
-        <Cell small={ 2 } large={ 2 }>
-          <Button color={ Colors.SUCCESS } isHollow>Revenue: { values.revenue }</Button>
-        </Cell>
-        <Cell small={ 2 } large={ 2 }>
-          <Button color={ Colors.SUCCESS } isHollow>ECPM: { values.ecpm }</Button>
-        </Cell>
-        <Cell small={ 2 } large={ 2 }>
-          <Button color={ Colors.SUCCESS } isHollow>Bid Price Total: { values.bidPriceTotal }</Button>
-        </Cell>
-        <Cell small={ 12 } large={ 12 }>
-          <h5>User Interaction</h5>
-        </Cell>
-        <Cell small={ 2 } large={ 2 }>
-          <Button color={ Colors.SUCCESS } isHollow>Clicks: { values.clicks }</Button>
+          <Button color={ Colors.SUCCESS } isHollow size={ Sizes.SMALL }>Requests: { values.requests }</Button>
+          <Button color={ Colors.SUCCESS } isHollow size={ Sizes.SMALL }>Bids: { values.bids }</Button>
+          <Button color={ Colors.SUCCESS } isHollow size={ Sizes.SMALL }>NBR: { values.nbr }</Button>
+          <Button color={ Colors.SUCCESS } isHollow size={ Sizes.SMALL }>Valid Imps: { values.impressions }</Button>
+          <Button color={ Colors.SUCCESS } isHollow size={ Sizes.SMALL }>Duplicate Imps: { values.duplicateImpressions }</Button>
+          <Button color={ Colors.SUCCESS } isHollow size={ Sizes.SMALL }>Expired Imps: { values.expiredImpressions }</Button>
+          <Button color={ Colors.SUCCESS } isHollow size={ Sizes.SMALL }>Invalid Imps: { values.invalidImpressions }</Button>
+          <Button color={ Colors.SUCCESS } isHollow size={ Sizes.SMALL }>Revenue: ${ values.revenue }</Button>
+          <Button color={ Colors.SUCCESS } isHollow size={ Sizes.SMALL }>ECPM: ${ values.ecpm }</Button>
+          <Button color={ Colors.SUCCESS } isHollow size={ Sizes.SMALL }>Bid Total: ${ values.bidPriceTotal }</Button>
+          <Button color={ Colors.SUCCESS } isHollow size={ Sizes.SMALL }>Clicks: { values.clicks }</Button>
         </Cell>
       </Grid>
     </div>

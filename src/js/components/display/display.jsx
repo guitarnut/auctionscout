@@ -8,8 +8,8 @@ function Display({ match }) {
   const [ values, setValues ] = useState({
     type: CreativeType.DISPLAY,
     adDomain: [],
-    w: 0,
-    h: 0,
+    width: 0,
+    height: 0,
     adm: '',
     syncUsers: false
   });
@@ -62,6 +62,18 @@ function Display({ match }) {
     }, [ values ]
   );
 
+  useEffect(
+    ()=>{
+      request(match.params.id, api.display.get, null)
+        .then(data=>{
+          setValues({...values, ...data})
+        })
+        .catch(e=>{
+          //
+        })
+    }, []
+  );
+
   return (
     <div>
       <h3>Display Ad</h3>
@@ -75,11 +87,19 @@ function Display({ match }) {
         e.preventDefault()
       } }>
         <Grid>
+          <Cell small={ 12 } large={ 12 }>
+            <h5>Name</h5>
+          </Cell>
+          <Cell small={ 12 } large={ 12 }>
+            <input name={ 'name' } value={ values.name } onChange={ handleInputChange }/>
+          </Cell>
+        </Grid>
+        <Grid>
           <Cell small={ 2 } large={ 2 }>
             <Switch input={ { defaultChecked: values.syncUsers } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, 'syncUsers') }/>
           </Cell>
           <Cell small={ 10 } large={ 10 }>
-            <p>Set an Auction Scout on the client during ad rendering (when possible).</p>
+            <p>Set an Auction Scout cookie on the client during ad rendering (when possible).</p>
           </Cell>
         </Grid>
         <Grid>
@@ -107,7 +127,7 @@ function Display({ match }) {
             <h5>Width</h5>
           </Cell>
           <Cell small={ 12 } large={ 12 }>
-            <input name={ 'w' } value={ values.w } onChange={ handleInputChange }/>
+            <input name={ 'width' } value={ values.width } onChange={ handleInputChange }/>
           </Cell>
         </Grid>
         <Grid>
@@ -115,7 +135,7 @@ function Display({ match }) {
             <h5>Height</h5>
           </Cell>
           <Cell small={ 12 } large={ 12 }>
-            <input name={ 'h' } value={ values.h } onChange={ handleInputChange }/>
+            <input name={ 'height' } value={ values.height } onChange={ handleInputChange }/>
           </Cell>
         </Grid>
         <Grid>

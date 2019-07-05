@@ -7,11 +7,11 @@ import { Model } from "../../const";
 function Pacing({ match, model }) {
 
   const [ values, setValues ] = useState({
-    requestLimit: '100',
-    bidRate: '5',
-    bidLimit: '100',
-    impressionLimit: '100',
-    revenueLimit: '10.00'
+    requestLimit: 0,
+    bidRate: 0,
+    bidLimit: 0,
+    impressionLimit: 0,
+    revenueLimit: 0
   });
   const [ warnings, setWarnings ] = useState({
     requestLimit: false,
@@ -48,10 +48,12 @@ function Pacing({ match, model }) {
 
   useEffect(
     ()=>{
-      request(match.params.id, api.pacing.campaign.get, null)
+      let endpoint = model === Model.CAMPAIGN ? api.targeting.campaign.get : api.targeting.creative.get;
+      request(match.params.id, endpoint, null)
         .then(data=>{
-          setValues({...values, ...data})
-        })
+          if (data !== null) {
+            setValues({...values, ...data})
+          }        })
         .catch(e=>{
           //
         })

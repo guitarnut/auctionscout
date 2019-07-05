@@ -1,21 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Callout, Cell, Colors, Grid, Sizes, Switch } from 'react-foundation';
-import { api, request } from '../../api/api';
+import { api, request, endpoint } from '../../api/api';
 
-function Vast({ id }) {
+function Vast({ match }) {
 
   const [ values, setValues ] = useState({
     name: '',
-    enabled: false,
     adId: '',
     crid: '',
-    minBid: 0,
-    maxBid: 1,
-    bidFrequency: 0,
-    videos: []
-  });
-
-  const [ video, setVideo ] = useState({
     videoFile: '',
     type: '',
     bitrate: 0,
@@ -28,80 +20,38 @@ function Vast({ id }) {
     scalable: true
   });
 
-  const [ warnings, setWarnings ] = useState({
-    minBid: false,
-    maxBid: false,
-    bidFrequency: false
-  });
-
   const handleInputChange = e => {
     const { name, value } = e.target;
     setValues({ ...values, [ name ]: value });
-  };
-
-  const handleInputChangeVideo = e => {
-    const { name, value } = e.target;
-    setVideo({ ...video, [ name ]: value });
   };
 
   const handleSwitchChange = (name) => {
     setValues({ ...values, [ name ]: !values[ name ] });
   };
 
-  const handleVideoSwitchChange = (name) => {
-    setVideo({ ...video, [ name ]: !video[ name ] });
-  };
-
   const handleSubmit = () => {
-    request(id, api.creative.save, values);
-  };
-
-  const removeVideo = (v) => {
-    let videos = values.videos;
-    let index = -1;
-    videos.map((video, i) => {
-      if (video.videoFile === v) {
-        index = i;
-      }
-    });
-    if (index > -1) {
-      videos.splice(index, 1);
-      setValues({ ...values, videos: videos });
-    }
-  };
-
-  const handleSubmitVideo = () => {
-    let videos = values.videos;
-    videos.push(video);
-    setValues({ ...values, videos: videos });
-
-    setVideo({
-      videoFile: '',
-      type: '',
-      bitrate: '',
-      minBitrate: '',
-      maxBitrate: '',
-      width: '',
-      height: '',
-      codec: '',
-      delivery: '',
-      scalable: true
-    });
+    request(match.params.id, api.video.save, values);
   };
 
   useEffect(
-    () => {
-      Object.keys(values).forEach(name => {
-        warnings[ name ] = values[ name ] === '0' || values[ name ] === '0.00';
-      });
-      setWarnings({ ...warnings });
-    }, [ values ]
+    ()=>{
+      request(match.params.id, api.video.get, null)
+        .then(data=>{
+          setValues({...values, ...data})
+        })
+        .catch(e=>{
+          //
+        })
+    }, []
   );
 
   return (
     <div>
       <h3>Video Ad</h3>
       <p>Reporting and auction behavior configuration for this item.</p>
+      {values.id !== undefined &&
+      <p><strong>VAST Tag:</strong> {endpoint}/vast/tag/{values.id}</p>
+      }
       <form onSubmit={ (e) => {
         e.preventDefault()
       } }>
@@ -116,14 +66,6 @@ function Vast({ id }) {
           </Cell>
           <Cell small={ 12 } large={ 12 }>
             <input name={ 'name' } value={ values.name } onChange={ handleInputChange }/>
-          </Cell>
-        </Grid>
-        <Grid>
-          <Cell small={ 2 } large={ 2 }>
-            <Switch input={ { defaultChecked: values.enabled } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, 'enabled') }/>
-          </Cell>
-          <Cell small={ 10 } large={ 10 }>
-            <p>This item is currently active.</p>
           </Cell>
         </Grid>
         <Grid>
@@ -146,59 +88,16 @@ function Vast({ id }) {
         </Grid>
         <Grid>
           <Cell small={ 12 } large={ 12 }>
-            <h5>Minimum Bid</h5>
-            <p>The lowest amount this creative will return as a bid value.</p>
-          </Cell>
-          <Cell small={ 4 } large={ 4 }>
-            <input name={ 'minBid' } value={ values.minBid } onChange={ handleInputChange }/>
-          </Cell>
-        </Grid>
-        <Grid>
-          <Cell small={ 12 } large={ 12 }>
-            <h5>Maximum Bid</h5>
-            <p>The highest amount this creative will return as a bid value.</p>
-          </Cell>
-          <Cell small={ 4 } large={ 4 }>
-            <input name={ 'maxBid' } value={ values.maxBid } onChange={ handleInputChange }/>
-          </Cell>
-        </Grid>
-        <Grid>
-          <Cell small={ 12 } large={ 12 }>
-            <h5>Bid Frequency</h5>
-            <p>The frequency with which this creative will return bids when eligible (1-10)</p>
-          </Cell>
-          <Cell small={ 4 } large={ 4 }>
-            <input name={ 'bidFrequency' } value={ values.bidFrequency } onChange={ handleInputChange }/>
-          </Cell>
-        </Grid>
-        <Grid>
-          <Cell small={ 12 } large={ 12 }>
-            <h5>Video Files</h5>
-            <p>Add up to three video files to be included in your VAST document.</p>
-          </Cell>
-        </Grid>
-        <Grid>
-          <Cell small={ 12 } large={ 12 }>
-            { values.videos.map(v => {
-              return (
-                <Button key={ v.videoFile } color={ Colors.SUCCESS } isHollow onClick={ removeVideo.bind(null, v.videoFile) }>[x] { v.videoFile }</Button>
-              )
-            })
-            }
-          </Cell>
-        </Grid>
-        <Grid>
-          <Cell small={ 12 } large={ 12 }>
             <h5>File</h5>
             <p>The location of your video file.</p>
           </Cell>
           <Cell small={ 4 } large={ 4 }>
-            <input name={ 'videoFile' } value={ video.videoFile } onChange={ handleInputChangeVideo }/>
+            <input name={ 'videoFile' } value={ values.videoFile } onChange={ handleInputChange }/>
           </Cell>
         </Grid>
         <Grid>
           <Cell small={ 2 } large={ 2 }>
-            <Switch input={ { defaultChecked: video.scalable } } size={ Sizes.SMALL } onChange={ handleVideoSwitchChange.bind(null, 'scalable') }/>
+            <Switch input={ { defaultChecked: values.scalable } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, 'scalable') }/>
           </Cell>
           <Cell small={ 10 } large={ 10 }>
             <p>This item is scalable.</p>
@@ -210,7 +109,7 @@ function Vast({ id }) {
             <p>The MIME type of your video file.</p>
           </Cell>
           <Cell small={ 4 } large={ 4 }>
-            <input name={ 'type' } value={ video.type } onChange={ handleInputChangeVideo }/>
+            <input name={ 'type' } value={ values.type } onChange={ handleInputChange }/>
           </Cell>
         </Grid>
         <Grid>
@@ -218,7 +117,7 @@ function Vast({ id }) {
             <h5>Bitrate</h5>
           </Cell>
           <Cell small={ 4 } large={ 4 }>
-            <input name={ 'bitrate' } value={ video.bitrate } onChange={ handleInputChangeVideo }/>
+            <input name={ 'bitrate' } value={ values.bitrate } onChange={ handleInputChange }/>
           </Cell>
         </Grid>
         <Grid>
@@ -226,7 +125,7 @@ function Vast({ id }) {
             <h5>Minimum Bitrate</h5>
           </Cell>
           <Cell small={ 4 } large={ 4 }>
-            <input name={ 'minBitrate' } value={ video.minBitrate } onChange={ handleInputChangeVideo }/>
+            <input name={ 'minBitrate' } value={ values.minBitrate } onChange={ handleInputChange }/>
           </Cell>
         </Grid>
         <Grid>
@@ -234,7 +133,7 @@ function Vast({ id }) {
             <h5>Maximum Bitrate</h5>
           </Cell>
           <Cell small={ 4 } large={ 4 }>
-            <input name={ 'maxBitrate' } value={ video.maxBitrate } onChange={ handleInputChangeVideo }/>
+            <input name={ 'maxBitrate' } value={ values.maxBitrate } onChange={ handleInputChange }/>
           </Cell>
         </Grid>
         <Grid>
@@ -242,7 +141,7 @@ function Vast({ id }) {
             <h5>Width</h5>
           </Cell>
           <Cell small={ 4 } large={ 4 }>
-            <input name={ 'width' } value={ video.width } onChange={ handleInputChangeVideo }/>
+            <input name={ 'width' } value={ values.width } onChange={ handleInputChange }/>
           </Cell>
         </Grid>
         <Grid>
@@ -250,7 +149,7 @@ function Vast({ id }) {
             <h5>Height</h5>
           </Cell>
           <Cell small={ 4 } large={ 4 }>
-            <input name={ 'height' } value={ video.height } onChange={ handleInputChangeVideo }/>
+            <input name={ 'height' } value={ values.height } onChange={ handleInputChange }/>
           </Cell>
         </Grid>
         <Grid>
@@ -258,7 +157,7 @@ function Vast({ id }) {
             <h5>Codec</h5>
           </Cell>
           <Cell small={ 4 } large={ 4 }>
-            <input name={ 'codec' } value={ video.codec } onChange={ handleInputChangeVideo }/>
+            <input name={ 'codec' } value={ values.codec } onChange={ handleInputChange }/>
           </Cell>
         </Grid>
         <Grid>
@@ -266,12 +165,7 @@ function Vast({ id }) {
             <h5>Delivery</h5>
           </Cell>
           <Cell small={ 4 } large={ 4 }>
-            <input name={ 'delivery' } value={ video.delivery } onChange={ handleInputChangeVideo }/>
-          </Cell>
-        </Grid>
-        <Grid>
-          <Cell small={ 4 } large={ 4 }>
-            <Button color={ Colors.SUCCESS } onClick={ handleSubmitVideo }>Add</Button>
+            <input name={ 'delivery' } value={ values.delivery } onChange={ handleInputChange }/>
           </Cell>
         </Grid>
       </form>

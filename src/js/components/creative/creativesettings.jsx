@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Callout, Cell, Colors, Grid, Sizes, Switch } from 'react-foundation';
 import { api, request } from '../../api/api';
 
-function CreativeSettings({ id }) {
+function CreativeSettings({ match }) {
 
   const [ values, setValues ] = useState({
     name: '',
@@ -30,7 +30,7 @@ function CreativeSettings({ id }) {
   };
 
   const handleSubmit = () => {
-    request(id, api.creative.save, values);
+    request(match.params.id, api.creative.save, values);
   };
 
   useEffect(
@@ -40,6 +40,18 @@ function CreativeSettings({ id }) {
       });
       setWarnings({ ...warnings });
     }, [ values ]
+  );
+
+  useEffect(
+    ()=>{
+      request(match.params.id, api.creative.get, null)
+        .then(data=>{
+          setValues({...values, ...data})
+        })
+        .catch(e=>{
+          //
+        })
+    }, []
   );
 
   return (

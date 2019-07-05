@@ -11,7 +11,8 @@ function CampaignsMenu() {
     name: ''
   });
   const [ redirect, setRedirect ] = useState(false);
-  const [ campaigns, setCamapigns ] = useState([]);
+  const [ campaigns, setCampaigns ] = useState([]);
+  const [ error, setError ] = useState(false);
 
   const handleInputChange = e => {
     const { name, value } = e.target;
@@ -19,20 +20,22 @@ function CampaignsMenu() {
   };
 
   const saveCampaign = () => {
+    setError(false);
+
     save(null, api.campaign.create, values)
       .then(data => {
         setValues({ ...values, ...data });
         setRedirect(true);
       })
       .catch(e => {
-        //
+        setError(true);
       })
   };
 
   useEffect(() => {
     request(null, api.campaign.all, null)
       .then(data => {
-        setCamapigns(data);
+        setCampaigns(data);
       })
       .catch(e => {
         //
@@ -53,6 +56,9 @@ function CampaignsMenu() {
         <Cell small={ 12 } large={ 12 }>
           <input name={ 'name' } value={ values.name } onChange={ handleInputChange }/>
           <Button color={ Colors.SUCCESS } onClick={ saveCampaign }>Create</Button>
+          { error &&
+          <p><strong>Unable to create new campaign.</strong></p>
+          }
         </Cell>
       </Grid>
       <h3>Manage Existing Campaigns</h3>

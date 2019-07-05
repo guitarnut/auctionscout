@@ -23,14 +23,12 @@ function Dashboard() {
     bidRequestsLimit: 0,
     bidRequestsOverage: 0,
     bidRequestsOverageLimit: 0,
-    periodEnd: 0,
-    date: new Date().toLocaleString()
+    periodEnd: 0
   });
 
   useEffect(() => {
     request(null, api.account.statistics.get)
       .then(data => {
-        console.log(data);
         setValues(data);
       })
       .catch(e => {
@@ -41,7 +39,10 @@ function Dashboard() {
   return (
     <div>
       <h3>Dashboard</h3>
-      <p>Application performance and statistics. Account limits will reset on { values.date }.</p>
+      <p>Application performance and statistics. Account limits will reset on {
+        new Date(values.periodEnd).toLocaleDateString() + ' at ' +
+        new Date(values.periodEnd).toLocaleTimeString()
+      }.</p>
       <Grid>
         <Cell small={ 12 } large={ 12 }>
           <h5>Bidder Statistics</h5>

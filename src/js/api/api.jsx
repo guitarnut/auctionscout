@@ -1,12 +1,16 @@
 import client from 'request';
 
-const endpoint = 'http://localhost:8080';
+export const endpoint = 'http://localhost:8080';
 const GET = 'GET';
 const POST = 'POST';
 const PUT = 'PUT';
 const DELETE = 'DELETE';
 const PATCH = 'PATCH';
 const ID_MACRO = '@__ID__@';
+
+const error = (resp)=> {
+  return resp.statusCode !== 200 && resp.statusCode !== 204;
+};
 
 const executePOST = (p, data) => {
   return new Promise((success, fail) => {
@@ -19,8 +23,8 @@ const executePOST = (p, data) => {
         }
       },
       (e, resp, body) => {
-        if (e) {
-          fail();
+          if (e || error(resp)) {
+          fail(e);
         } else {
           success(JSON.parse(body));
         }
@@ -33,10 +37,14 @@ const executeGET = (p) => {
   return new Promise((success, fail) => {
     client.get(endpoint + p,
       (e, resp, body) => {
-        if (e) {
-          fail();
+        if (e || error(resp)) {
+          fail(e);
         } else {
-          success(JSON.parse(body));
+          if (body !== '') {
+            success(JSON.parse(body));
+          } else {
+            success(null);
+          }
         }
       }
     )
@@ -47,8 +55,8 @@ const executeDELETE = (p) => {
   return new Promise((success, fail) => {
     client.del(endpoint + p,
       (e, resp, body) => {
-        if (e) {
-          fail();
+        if (e || error(resp)) {
+          fail(e);
         } else {
           success();
         }
@@ -67,7 +75,7 @@ export const request = (id, config, data) => {
       Object.keys(data).map(k => {
         path += k + '=' + data[ k ] + '&';
       });
-      path = path.substr(0, path.length - 2);
+      path = path.substr(0, path.length - 1);
     }
     return executeGET(path);
   } else if (config.method === POST) {
@@ -85,15 +93,25 @@ export const api = {
     },
     get: {
       method: GET,
-      path: '/api/creative/view'
+      path: '/api/creative/' + ID_MACRO + '/view'
     },
     save: {
       method: POST,
-      path: '/api/creative/save'
+      path: '/api/creative/' + ID_MACRO + '/save'
+    },
+    create: {
+      method: POST,
+      path: '/api/creative/create'
     },
     remove: {
       method: DELETE,
-      path: '/api/creative/delete'
+      path: '/api/creative/' + ID_MACRO + '/delete'
+    },
+    statistics: {
+      reset: {
+        method: GET,
+        path: '/api/creative/' + ID_MACRO + '/statistics/reset'
+      }
     }
   },
 
@@ -117,13 +135,44 @@ export const api = {
     remove: {
       method: DELETE,
       path: '/api/campaign/' + ID_MACRO + '/delete'
+    },
+    creative: {
+      add: {
+        method: GET,
+        path: '/api/campaign/' + ID_MACRO + '/creative/add'
+      },
+      remove: {
+        method: GET,
+        path: '/api/campaign/' + ID_MACRO + '/creative/remove'
+      }
+    },
+    statistics: {
+      reset: {
+        method: GET,
+        path: '/api/campaign/' + ID_MACRO + '/statistics/reset'
+      }
     }
   },
 
   display: {
+    get: {
+      method: GET,
+      path: '/api/display/' + ID_MACRO + '/view'
+    },
     save: {
       method: POST,
-      path: '/api/display/save'
+      path: '/api/display/' + ID_MACRO + '/save'
+    }
+  },
+
+  video: {
+    get: {
+      method: GET,
+      path: '/api/video/' + ID_MACRO + '/view'
+    },
+    save: {
+      method: POST,
+      path: '/api/video/' + ID_MACRO + '/save'
     }
   },
 

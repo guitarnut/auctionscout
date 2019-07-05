@@ -1,33 +1,58 @@
-import React, { useState } from 'react';
-import { Cell, Grid } from 'react-foundation';
+import React, { useEffect, useState } from 'react';
+import { Cell, Colors, Grid, Button } from 'react-foundation';
+import { Redirect } from 'react-router';
+import { Link as ReactLink } from 'react-router-dom';
+
+import { request, api } from "../../api/api";
 
 function AuctionRecord({ match }) {
 
   const [ values, setValues ] = useState({
-    publisher: 'Publisher',
-    ip: '243.12.0.23',
-    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36',
-    requestTimestamp: 1547472805830,
-    responseTimestamp: 1547472805934,
-    impressionTimestamp: 1547472806554,
-    bidRequestId: '23j234j23423kkjkhkjhkj',
+    publisher: '',
+    ip: '',
+    userAgent: '',
+    requestTimestamp: 0,
+    responseTimestamp: 0,
+    impressionTimestamp: 0,
+    bidRequestId: '',
     bidRequest: {},
     bidResponse: {},
-    cookies: 'JSESSIONID=77F41C4D985D71DB9850BB654EE14213; __io_cid=cookie_value',
-    host: 'cnn.com',
-    campaign: 'campaign',
-    targetingFailures: {
-      Test: 'Request limit reached'
-    },
-    bidRequestErrors: [
-      'No buyer ID'
-    ],
-    markup: '<div></div>'
+    cookies: '',
+    host: '',
+    campaign: '',
+    targetingFailures: {},
+    bidRequestErrors: [],
+    markup: ''
   });
+  const [ redirect, setRedirect ] = useState(false);
+
+  const del = () => {
+    request(match.params.id, api.auctionrecord.remove, null)
+      .then(() => {
+        setRedirect(true);
+      })
+      .catch(e => {
+        //
+      })
+  };
+
+  useEffect(() => {
+    request(match.params.id, api.auctionrecord.get, null)
+      .then(data => {
+        setValues({...data})
+      })
+      .catch(e => {
+        //
+      })
+  }, []);
 
   return (
     <div>
+      { redirect &&
+      <Redirect to={ '/app/history' }/>
+      }
       <h3>Auction Record</h3>
+      <Button color={ Colors.ALERT } onClick={ del }>Delete</Button>
       <Grid>
         <Cell small={ 12 } large={ 12 }>
           <h5>Request Data</h5>
@@ -74,6 +99,18 @@ function AuctionRecord({ match }) {
         <Cell small={ 12 } large={ 12 }>
           <h5>Response Data</h5>
         </Cell>
+        <Cell small={ 6 } large={ 6 }>
+          <p><ReactLink to={ `/app/campaign/${values.campaign}` }>View Campaign</ReactLink></p>
+        </Cell>
+        <Cell small={ 6 } large={ 6 }>
+          <p><ReactLink to={ `/app/creative/${values.creative}` }>View Creative</ReactLink></p>
+        </Cell>
+        <Cell small={ 3 } large={ 3 }>
+          <p><strong>Ad Markup</strong></p>
+        </Cell>
+        <Cell small={ 12 } large={ 12 }>
+          <p>{ values.markup }</p>
+        </Cell>
       </Grid>
       <hr/>
       <Grid>
@@ -91,12 +128,6 @@ function AuctionRecord({ match }) {
         </Cell>
         <Cell small={ 12 } large={ 12 }>
           <p>{ JSON.stringify(values.bidResponse) }</p>
-        </Cell>
-        <Cell small={ 3 } large={ 3 }>
-          <p><strong>Ad Markup</strong></p>
-        </Cell>
-        <Cell small={ 12 } large={ 12 }>
-          <p>{ values.markup }</p>
         </Cell>
       </Grid>
     </div>

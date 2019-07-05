@@ -52,10 +52,10 @@ function History() {
         <h5>Auction Records</h5>
         <p>Real-time bidding results and data.</p>
         <Grid>
-          <Cell small={ 2 } large={ 2 }>
+          <Cell small={ 3 } large={ 3 }>
             <p><strong>Date</strong></p>
           </Cell>
-          <Cell small={ 2 } large={ 2 }>
+          <Cell small={ 3 } large={ 3 }>
             <p><strong>Request ID</strong></p>
           </Cell>
           <Cell small={ 3 } large={ 3 }>
@@ -64,30 +64,26 @@ function History() {
           <Cell small={ 3 } large={ 3 }>
             <p><strong>Campaign</strong></p>
           </Cell>
-          <Cell small={ 2 } large={ 2 }>
-            <p><strong>Actions</strong></p>
-          </Cell>
         </Grid>
         { values.auctionrecords.map(r => {
           return (
             <Grid key={ r.id }>
-              <Cell small={ 2 } large={ 2 }>
-                <p>{ r.requestTimestamp }</p>
+              <Cell small={ 3 } large={ 3 }>
+                <p><ReactLink to={ `/app/auctionrecord/${r.id}` }>
+                  {
+                    new Date(r.requestTimestamp).toLocaleDateString() + ', ' +
+                    new Date(r.requestTimestamp).toLocaleTimeString()
+                  }
+                </ReactLink></p>
               </Cell>
-              <Cell small={ 2 } large={ 2 }>
+              <Cell small={ 3 } large={ 3 }>
                 <p>{ r.bidRequestId }</p>
               </Cell>
               <Cell small={ 3 } large={ 3 }>
-                <p>{ r.campaign }</p>
+                <p><ReactLink to={ `/app/campaign/${r.campaign}` }>View</ReactLink></p>
               </Cell>
               <Cell small={ 3 } large={ 3 }>
-                <p>{ r.creative }</p>
-              </Cell>
-              <Cell small={ 1 } large={ 1 }>
-                <ReactLink to={ `/app/auctionrecord/${r.id}` }><Button color={ Colors.SUCCESS }>View</Button></ReactLink>
-              </Cell>
-              <Cell small={ 1 } large={ 1 }>
-                <Button color={ Colors.WARNING }>Delete</Button>
+                <p><ReactLink to={ `/app/creative/${r.creative}` }>View</ReactLink></p>
               </Cell>
             </Grid>
           )
@@ -99,30 +95,26 @@ function History() {
         <h5>VAST Records</h5>
         <p>VAST tag results and data.</p>
         <Grid>
-          <Cell small={ 2 } large={ 2 }>
+          <Cell small={ 3 } large={ 3 }>
             <p><strong>Date</strong></p>
           </Cell>
-          <Cell small={ 8 } large={ 8 }>
+          <Cell small={ 9 } large={ 9 }>
             <p><strong>VAST Name</strong></p>
-          </Cell>
-          <Cell small={ 2 } large={ 2 }>
-            <p><strong>Actions</strong></p>
           </Cell>
         </Grid>
         { values.vastrecords.map(r => {
           return (
             <Grid key={ r.id }>
-              <Cell small={ 2 } large={ 2 }>
-                <p>{ r.requestTimestamp }</p>
+              <Cell small={ 3 } large={ 3 }>
+                <p><ReactLink to={ `/app/vastrecord/${r.id}` }>
+                  {
+                    new Date(r.requestTimestamp).toLocaleDateString() + ', ' +
+                    new Date(r.requestTimestamp).toLocaleTimeString()
+                  }
+                </ReactLink></p>
               </Cell>
-              <Cell small={ 8 } large={ 8 }>
+              <Cell small={ 9 } large={ 9 }>
                 <p>{ r.vastName }</p>
-              </Cell>
-              <Cell small={ 1 } large={ 1 }>
-                <ReactLink to={ `/app/vastrecord/${r.id}` }><Button color={ Colors.SUCCESS }>View</Button></ReactLink>
-              </Cell>
-              <Cell small={ 1 } large={ 1 }>
-                <Button color={ Colors.WARNING }>Delete</Button>
               </Cell>
             </Grid>
           )

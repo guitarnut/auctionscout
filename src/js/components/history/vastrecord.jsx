@@ -1,22 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import { Link as ReactLink } from 'react-router-dom';
-import { Callout, Switch, Colors, Sizes, Link, Grid, Cell, Button } from 'react-foundation';
+import React, { useEffect, useState } from 'react';
+import { Redirect } from 'react-router';
+import { Cell, Colors, Grid, Button } from 'react-foundation';
 import { api, request } from '../../api/api';
 
 function VastRecord({match}) {
 
   const [ values, setValues ] = useState({
-    name: 'Publisher',
-    ip: '243.12.0.23',
-    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.62 Safari/537.36',
-    requestTimestamp: 1547472805830,
-    responseTimestamp: 1547472805934,
-    cookies: 'JSESSIONID=77F41C4D985D71DB9850BB654EE14213; __io_cid=cookie_value'
+    vastName: '',
+    ip: '',
+    userAgent: '',
+    requestTimestamp: 0,
+    responseTimestamp: 0,
+    cookies: ''
   });
+
+  const [ redirect, setRedirect ] = useState(false);
+
+  const del = () => {
+    request(match.params.id, api.vastrecord.remove, null)
+      .then(() => {
+        setRedirect(true);
+      })
+      .catch(e => {
+        //
+      })
+  };
+
+  useEffect(() => {
+    request(match.params.id, api.vastrecord.get, null)
+      .then(data => {
+        setValues({...data})
+      })
+      .catch(e => {
+        //
+      })
+  }, []);
 
   return (
     <div>
+      { redirect &&
+      <Redirect to={ '/app/history' }/>
+      }
       <h3>VAST Tag Record</h3>
+      <Button color={ Colors.ALERT } onClick={ del }>Delete</Button>
       <Grid>
         <Cell small={ 12 } large={ 12 }>
           <h5>Request Data</h5>
@@ -28,13 +54,13 @@ function VastRecord({match}) {
           <p><strong>Host</strong></p>
         </Cell>
         <Cell small={ 3 } large={ 3 }>
+          <p><strong>Host</strong></p>
+        </Cell>
+        <Cell small={ 3 } large={ 3 }>
           <p><strong>Timestamp</strong></p>
         </Cell>
         <Cell small={ 3 } large={ 3 }>
-          <p><strong>Publisher</strong></p>
-        </Cell>
-        <Cell small={ 3 } large={ 3 }>
-          <p>{ values.name }</p>
+          <p>{ values.vastName }</p>
         </Cell>
         <Cell small={ 3 } large={ 3 }>
           <p>{ values.ip }</p>

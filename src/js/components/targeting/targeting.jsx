@@ -62,9 +62,12 @@ function Targeting({ match, model }) {
 
   useEffect(
     ()=>{
-      request(match.params.id, api.targeting.campaign.get, null)
+      let endpoint = model === Model.CAMPAIGN ? api.targeting.campaign.get : api.targeting.creative.get;
+      request(match.params.id, endpoint, null)
         .then(data=>{
-          setValues({...values, ...data})
+          if (data !== null) {
+            setValues({...values, ...data})
+          }
         })
         .catch(e=>{
           //
