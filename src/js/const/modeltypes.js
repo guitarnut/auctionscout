@@ -1,4 +1,4 @@
 export const Model = {
-  'CREATIVE': 'CREATIVE',
-  'CAMPAIGN': 'CAMPAIGN'
+  CREATIVE: 'CREATIVE',
+  CAMPAIGN: 'CAMPAIGN'
 };

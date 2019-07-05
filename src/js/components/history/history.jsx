@@ -7,23 +7,39 @@ function History() {
 
   const [ values, setValues ] = useState({
     view: 'auctions',
-    auctionrecords: [ {
-      id: 132,
-      bidRequestId: 'asdf2342sdfadsf',
-      requestTimestamp: 1547472792755,
-      campaign: 'Test Campaign',
-      creative: 'Display Ad 1'
-    } ],
-    vastrecords: [ {
-      id: 132,
-      requestTimestamp: 1547472792755,
-      vastName: '23jh234kh234234kj'
-    } ]
+    auctionrecords: [],
+    vastrecords: []
   });
 
   const changeView = (v) => {
-    setValues({ ...values, view: v })
+    if (v === 'auctions') {
+      request(null, api.auctionrecord.all, null)
+        .then(data => {
+          setValues({ ...values, view: v, auctionrecords: data })
+        })
+        .catch(e => {
+
+        })
+    } else if (v === 'vast') {
+      request(null, api.vastrecord.all, null)
+        .then(data => {
+          setValues({ ...values, view: v, vastrecords: data })
+        })
+        .catch(e => {
+
+        })
+    }
   };
+
+  useEffect(() => {
+    request(null, api.auctionrecord.all, null)
+      .then(data => {
+        setValues({ ...values, auctionrecords: data })
+      })
+      .catch(e => {
+
+      })
+  }, []);
 
   return (
     <div>

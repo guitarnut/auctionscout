@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Cell, Colors, Grid, Sizes, Switch } from 'react-foundation';
-import { api } from '../../api/api';
+import { api, request } from '../../api/api';
 import { handleSwitchChange, save } from "../../common/forminput";
 
 function CampaignSettings({ match }) {
@@ -31,6 +31,18 @@ function CampaignSettings({ match }) {
       });
       setWarnings({ ...warnings });
     }, [ values ]
+  );
+
+  useEffect(
+    ()=>{
+      request(match.params.id, api.campaign.get, null)
+        .then(data=>{
+          setValues({...values, ...data})
+        })
+        .catch(e=>{
+          //
+        })
+    }, []
   );
 
   const saveSettings = () => {
@@ -107,8 +119,8 @@ function CampaignSettings({ match }) {
           <Cell small={ 12 } large={ 12 }>
             <h5>Sync Users</h5>
           </Cell>
-          <Cell small={ 12 } large={ 12 }>
-            <input name={ 'impressionExpiry' } value={ values.impressionExpiry } onChange={ handleInputChange }/>
+          <Cell small={ 2 } large={ 2 }>
+            <Switch input={ { defaultChecked: values.syncUsers } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, values, setValues, 'syncUsers') }/>
           </Cell>
         </Grid>
       </form>

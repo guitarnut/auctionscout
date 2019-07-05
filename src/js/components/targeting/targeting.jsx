@@ -4,8 +4,9 @@ import { Callout, Colors, Link, Button, Switch, Sizes, Grid, Cell } from 'react-
 import { api, request } from '../../api/api';
 import { handleSwitchChange, save } from "../../common/forminput";
 import style from './targeting.scss';
+import { Model } from "../../const";
 
-function Targeting({ match }) {
+function Targeting({ match, model }) {
 
   const [ values, setValues ] = useState({
     userMatch: false,
@@ -48,13 +49,36 @@ function Targeting({ match }) {
     setValues({ ...values, [ name ]: array });
   };
 
+  const saveTargeting = () => {
+    let endpoint = model === Model.CAMPAIGN ? api.targeting.campaign.save : api.targeting.creative.save;
+    save(match.params.id, endpoint, values)
+      .then(data => {
+        setValues({ ...values, ...data });
+      })
+      .catch(e => {
+        //
+      })
+  };
+
+  useEffect(
+    ()=>{
+      request(match.params.id, api.targeting.campaign.get, null)
+        .then(data=>{
+          setValues({...values, ...data})
+        })
+        .catch(e=>{
+          //
+        })
+    }, []
+  );
+
   return (
     <div>
       <h3>Targeting</h3>
       <p>Set selection criteria for your item.</p>
       <Grid>
         <Cell small={ 4 } large={ 4 }>
-          <Button color={ Colors.SUCCESS } onClick={ save.bind(null, match.params.id, api.targeting.save, values) }>Save</Button>
+          <Button color={ Colors.SUCCESS } onClick={ saveTargeting }>Save</Button>
         </Cell>
       </Grid>
       <form>

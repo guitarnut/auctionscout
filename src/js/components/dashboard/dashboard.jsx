@@ -1,35 +1,47 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Badge, Cell, Colors, Grid } from 'react-foundation';
+import { request, api } from "../../api/api";
 
 function Dashboard() {
 
   const [ values, setValues ] = useState({
     campaigns: 0,
-    campaignsLimit: 3,
+    campaignsLimit: 0,
     creatives: 0,
-    creativesLimit: 3,
+    creativesLimit: 0,
     vast: 0,
-    vastLimit: 3,
-    auctionRecords: 2,
-    auctionRecordsLimit: 3,
+    vastLimit: 0,
+    auctionRecords: 0,
+    auctionRecordsLimit: 0,
     vastRecords: 0,
-    vastRecordsLimit: 3,
+    vastRecordsLimit: 0,
     vastTagRequests: 0,
-    vastTagRequestsLimit: 3,
+    vastTagRequestsLimit: 0,
     vastTagRequestsOverage: 0,
-    vastTagRequestsOverageLimit: 5,
-    bidRequests: 2,
-    bidRequestsLimit: 3,
+    vastTagRequestsOverageLimit: 0,
+    bidRequests: 0,
+    bidRequestsLimit: 0,
     bidRequestsOverage: 0,
-    bidRequestsOverageLimit: 5,
-    periodEnd: 1549461153608,
+    bidRequestsOverageLimit: 0,
+    periodEnd: 0,
     date: new Date().toLocaleString()
   });
+
+  useEffect(() => {
+    request(null, api.account.statistics.get)
+      .then(data => {
+        console.log(data);
+        setValues(data);
+      })
+      .catch(e => {
+        //
+      })
+  }, []);
 
   return (
     <div>
       <h3>Dashboard</h3>
-      <p>Application performance and statistics. Account limits will reset on {values.date}.</p>
+      <p>Application performance and statistics. Account limits will reset on { values.date }.</p>
       <Grid>
         <Cell small={ 12 } large={ 12 }>
           <h5>Bidder Statistics</h5>

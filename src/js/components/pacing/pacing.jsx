@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Callout, Cell, Colors, Grid, Sizes } from 'react-foundation';
-import { api } from '../../api/api';
+import { api, request } from '../../api/api';
 import { save } from "../../common/forminput";
+import { Model } from "../../const";
 
-function Pacing({ match }) {
+function Pacing({ match, model }) {
 
   const [ values, setValues ] = useState({
     requestLimit: '100',
@@ -25,6 +26,17 @@ function Pacing({ match }) {
     setValues({ ...values, [ name ]: value });
   };
 
+  const savePacing = () => {
+    let endpoint = model === Model.CAMPAIGN ? api.pacing.campaign.save : api.pacing.creative.save;
+    save(match.params.id, endpoint, values)
+      .then(data => {
+        setValues({ ...values, ...data });
+      })
+      .catch(e => {
+        //
+      })
+  };
+
   useEffect(
     () => {
       Object.keys(values).forEach(name => {
@@ -34,13 +46,25 @@ function Pacing({ match }) {
     }, [ values ]
   );
 
+  useEffect(
+    ()=>{
+      request(match.params.id, api.pacing.campaign.get, null)
+        .then(data=>{
+          setValues({...values, ...data})
+        })
+        .catch(e=>{
+          //
+        })
+    }, []
+  );
+
   return (
     <div>
       <h3>Pacing</h3>
       <p>Set limits on the performance of your item.</p>
       <Grid>
         <Cell small={ 4 } large={ 4 }>
-          <Button color={ Colors.SUCCESS }  onClick={ save.bind(null, match.params.id, api.pacing.save, values) }>Save</Button>
+          <Button color={ Colors.SUCCESS }  onClick={ savePacing }>Save</Button>
         </Cell>
       </Grid>
       <form onSubmit={ (e) => {

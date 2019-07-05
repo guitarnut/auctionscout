@@ -6,6 +6,7 @@ const POST = 'POST';
 const PUT = 'PUT';
 const DELETE = 'DELETE';
 const PATCH = 'PATCH';
+const ID_MACRO = '@__ID__@';
 
 const executePOST = (p, data) => {
   return new Promise((success, fail) => {
@@ -28,21 +29,40 @@ const executePOST = (p, data) => {
   });
 };
 
-const executeGET = (p, data) => {
-  console.log(endpoint + p, data);
+const executeGET = (p) => {
+  return new Promise((success, fail) => {
+    client.get(endpoint + p,
+      (e, resp, body) => {
+        if (e) {
+          fail();
+        } else {
+          success(JSON.parse(body));
+        }
+      }
+    )
+  });
 };
 
-const executeDELETE = (p, data) => {
-  console.log(endpoint + p, data);
+const executeDELETE = (p) => {
+  return new Promise((success, fail) => {
+    client.del(endpoint + p,
+      (e, resp, body) => {
+        if (e) {
+          fail();
+        } else {
+          success();
+        }
+      }
+    )
+  });
 };
 
 
 export const request = (id, config, data) => {
-  console.log(id);
-  let path = (id === undefined || id === null) ? config.path : config.path.replace('@__ID__@', id);
+  let path = (id === undefined || id === null) ? config.path : config.path.replace(ID_MACRO, id);
 
   if (config.method === GET) {
-    if (data !== undefined) {
+    if (data !== undefined && data !== null) {
       path += "?";
       Object.keys(data).map(k => {
         path += k + '=' + data[ k ] + '&';
@@ -84,11 +104,11 @@ export const api = {
     },
     get: {
       method: GET,
-      path: '/api/campaign/view'
+      path: '/api/campaign/' + ID_MACRO + '/view'
     },
     save: {
       method: POST,
-      path: `/api/campaign/@__ID__@/save`
+      path: '/api/campaign/' + ID_MACRO + '/save'
     },
     create: {
       method: POST,
@@ -96,7 +116,7 @@ export const api = {
     },
     remove: {
       method: DELETE,
-      path: '/api/campaign/delete'
+      path: '/api/campaign/' + ID_MACRO + '/delete'
     }
   },
 
@@ -108,13 +128,25 @@ export const api = {
   },
 
   pacing: {
-    get: {
-      method: GET,
-      path: '/api/pacing/view'
+    campaign: {
+      get: {
+        method: GET,
+        path: '/api/campaign/' + ID_MACRO + '/pacing/view'
+      },
+      save: {
+        method: POST,
+        path: '/api/campaign/' + ID_MACRO + '/pacing/save'
+      }
     },
-    save: {
-      method: POST,
-      path: '/api/pacing/save'
+    creative: {
+      get: {
+        method: GET,
+        path: '/api/creative/' + ID_MACRO + '/pacing/view'
+      },
+      save: {
+        method: POST,
+        path: '/api/creative/' + ID_MACRO + '/pacing/save'
+      }
     }
   },
 
@@ -130,35 +162,64 @@ export const api = {
   },
 
   targeting: {
-    get: {
-      method: GET,
-      path: '/api/targeting/view'
+    campaign: {
+      get: {
+        method: GET,
+        path: '/api/campaign/' + ID_MACRO + '/targeting/view'
+      },
+      save: {
+        method: POST,
+        path: '/api/campaign/' + ID_MACRO + '/targeting/save'
+      }
     },
-    save: {
-      method: POST,
-      path: '/api/targeting/save'
+    creative: {
+      get: {
+        method: GET,
+        path: '/api/creative/' + ID_MACRO + '/targeting/view'
+      },
+      save: {
+        method: POST,
+        path: '/api/creative/' + ID_MACRO + '/targeting/save'
+      }
     }
   },
 
   auctionrecord: {
+    all: {
+      method: GET,
+      path: '/api/auctionrecord/all'
+    },
     get: {
       method: GET,
-      path: '/api/targeting/view'
+      path: '/api/auctionrecord/' + ID_MACRO + '/view'
     },
     remove: {
       method: DELETE,
-      path: '/api/targeting/save'
+      path: '/api/auctionrecord/' + ID_MACRO + '/delete'
     }
   },
 
   vastrecord: {
+    all: {
+      method: GET,
+      path: '/api/vasttagrecord/all'
+    },
     get: {
       method: GET,
-      path: '/api/targeting/view'
+      path: '/api/vasttagrecord/' + ID_MACRO + '/view'
     },
     remove: {
       method: DELETE,
-      path: '/api/targeting/save'
+      path: '/api/vasttagrecord/' + ID_MACRO + '/delete'
+    }
+  },
+
+  account: {
+    statistics: {
+      get: {
+        method: GET,
+        path: '/api/account/statistics/view'
+      }
     }
   }
 };
