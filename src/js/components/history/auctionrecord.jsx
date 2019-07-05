@@ -39,7 +39,7 @@ function AuctionRecord({ match }) {
   useEffect(() => {
     request(match.params.id, api.auctionrecord.get, null)
       .then(data => {
-        setValues({...data})
+        setValues({ values, ...data })
       })
       .catch(e => {
         //
@@ -95,6 +95,8 @@ function AuctionRecord({ match }) {
         </Cell>
       </Grid>
       <hr/>
+      <p>{ values.bidRequestErrors.join(',') }</p>
+      <p>{ JSON.stringify(values.targetingFailures) }</p>
       <Grid>
         <Cell small={ 12 } large={ 12 }>
           <h5>Response Data</h5>

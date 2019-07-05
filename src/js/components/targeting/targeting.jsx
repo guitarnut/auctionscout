@@ -53,7 +53,9 @@ function Targeting({ match, model }) {
     let endpoint = model === Model.CAMPAIGN ? api.targeting.campaign.save : api.targeting.creative.save;
     save(match.params.id, endpoint, values)
       .then(data => {
-        setValues({ ...values, ...data });
+        if (data !== null) {
+          setValues({ ...values, ...data });
+        }
       })
       .catch(e => {
         //

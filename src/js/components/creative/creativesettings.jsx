@@ -7,8 +7,6 @@ function CreativeSettings({ match }) {
   const [ values, setValues ] = useState({
     name: '',
     enabled: false,
-    adId: '',
-    crid: '',
     minBid: 0,
     maxBid: 1,
     bidFrequency: 10
@@ -80,24 +78,6 @@ function CreativeSettings({ match }) {
           </Cell>
           <Cell small={ 10 } large={ 10 }>
             <p>This item is currently active.</p>
-          </Cell>
-        </Grid>
-        <Grid>
-          <Cell small={ 12 } large={ 12 }>
-            <h5>Ad Id</h5>
-            <p>A unique identifier for this advertisement.</p>
-          </Cell>
-          <Cell small={ 4 } large={ 4 }>
-            <input name={ 'adId' } value={ values.adId } onChange={ handleInputChange }/>
-          </Cell>
-        </Grid>
-        <Grid>
-          <Cell small={ 12 } large={ 12 }>
-            <h5>Creative Id</h5>
-            <p>A unique identifier for the delivered creative.</p>
-          </Cell>
-          <Cell small={ 4 } large={ 4 }>
-            <input name={ 'crid' } value={ values.crid } onChange={ handleInputChange }/>
           </Cell>
         </Grid>
         <Grid>

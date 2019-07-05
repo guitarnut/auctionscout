@@ -29,7 +29,9 @@ function Dashboard() {
   useEffect(() => {
     request(null, api.account.statistics.get)
       .then(data => {
-        setValues(data);
+        if (data !== null) {
+          setValues(data);
+        }
       })
       .catch(e => {
         //
