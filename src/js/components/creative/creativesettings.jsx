@@ -74,7 +74,7 @@ function CreativeSettings({ match }) {
         </Grid>
         <Grid>
           <Cell small={ 2 } large={ 2 }>
-            <Switch input={ { defaultChecked: values.enabled } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, 'enabled') }/>
+            <Switch name={'enabled'} input={ { checked: values.enabled } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, 'enabled') }/>
           </Cell>
           <Cell small={ 10 } large={ 10 }>
             <p>This item is currently active.</p>

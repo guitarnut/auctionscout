@@ -102,7 +102,7 @@ function Display({ match }) {
         </Grid>
         <Grid>
           <Cell small={ 2 } large={ 2 }>
-            <Switch input={ { defaultChecked: values.syncUsers } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, 'syncUsers') }/>
+            <Switch input={ { checked: values.syncUsers } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, 'syncUsers') }/>
           </Cell>
           <Cell small={ 10 } large={ 10 }>
             <p>Set an Auction Scout cookie on the client during ad rendering (when possible).</p>

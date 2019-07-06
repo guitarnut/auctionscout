@@ -1,13 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Cell, Colors, Grid } from 'react-foundation';
-import { Redirect } from 'react-router';
 import { Link as ReactLink } from 'react-router-dom';
-
-import CampaignSettings from "./campaignsettings";
-import Pacing from "../pacing/pacing";
-import Targeting from "../targeting/targeting";
-import { Model } from "../../const";
-import { request, api } from "../../api/api";
+import { api, request } from "../../api/api";
 
 function CampaignCreatives({ match }) {
 

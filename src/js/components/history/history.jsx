@@ -31,6 +31,16 @@ function History() {
     }
   };
 
+  const deleteAll = () => {
+    request(null, api.auctionrecord.clear, null)
+      .then(() => {
+        setValues({ ...values, auctionrecords: [] })
+      })
+      .catch(e => {
+
+      })
+  };
+
   useEffect(() => {
     request(null, api.auctionrecord.all, null)
       .then(data => {
@@ -51,6 +61,7 @@ function History() {
       <div>
         <h5>Auction Records</h5>
         <p>Real-time bidding results and data.</p>
+        <Button color={ Colors.ALERT } onClick={ deleteAll }>Delete All</Button>
         <Grid>
           <Cell small={ 3 } large={ 3 }>
             <p><strong>Date</strong></p>

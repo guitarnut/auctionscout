@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Cell, Colors, Grid, Button } from 'react-foundation';
 import { Redirect } from 'react-router';
 import { Link as ReactLink } from 'react-router-dom';
@@ -95,18 +95,61 @@ function AuctionRecord({ match }) {
         </Cell>
       </Grid>
       <hr/>
-      <p>{ values.bidRequestErrors.join(',') }</p>
-      <p>{ JSON.stringify(values.targetingFailures) }</p>
+      <Grid>
+        <Cell small={ 12 } large={ 12 }>
+          <h5>Bid Request Issues</h5>
+        </Cell>
+        <Cell small={ 12 } large={ 12 }>
+          { values.bidRequestErrors.map((v, i) => {
+            return (
+              <Button key={ i } color={ Colors.WARNING } isHollow>{ v }</Button>
+            )
+          })
+          }
+        </Cell>
+      </Grid>
+      <hr/>
+      <Grid>
+        <Cell small={ 12 } large={ 12 }>
+          <h5>Targeting Failure</h5>
+        </Cell>
+        <Cell small={ 6 } large={ 6 }>
+          <p><strong>Item</strong></p>
+        </Cell>
+        <Cell small={ 6 } large={ 6 }>
+          <p><strong>Failure</strong></p>
+        </Cell>
+        { Object.keys(values.targetingFailures).map((v, i) => {
+          return (
+            <Fragment key={ i }>
+              <Cell small={ 6 } large={ 6 }>
+                <p>{ v }</p>
+              </Cell>
+              <Cell small={ 6 } large={ 6 }>
+                <p>{ values.targetingFailures[ v ] }</p>
+              </Cell>
+            </Fragment>
+          )
+        })
+        }
+      </Grid>
+      <hr/>
       <Grid>
         <Cell small={ 12 } large={ 12 }>
           <h5>Response Data</h5>
         </Cell>
+        { values.campaign !== null &&
         <Cell small={ 6 } large={ 6 }>
-          <p><ReactLink to={ `/app/campaign/${values.campaign}` }>View Campaign</ReactLink></p>
+          <p><ReactLink to={ `/app/campaign/${values.campaign}` }>View Eligible Campaign</ReactLink></p>
         </Cell>
+        }
+        { values.creative !== null &&
         <Cell small={ 6 } large={ 6 }>
-          <p><ReactLink to={ `/app/creative/${values.creative}` }>View Creative</ReactLink></p>
+          <p><ReactLink to={ `/app/creative/${values.creative}` }>View Eligible Creative</ReactLink></p>
         </Cell>
+        }
+      </Grid>
+      <Grid>
         <Cell small={ 3 } large={ 3 }>
           <p><strong>Ad Markup</strong></p>
         </Cell>

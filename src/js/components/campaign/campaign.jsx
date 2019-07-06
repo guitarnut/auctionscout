@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Cell, Colors, Grid } from 'react-foundation';
+import { Button, Cell, Colors, Grid, Menu, MenuItem } from 'react-foundation';
 import { Redirect } from 'react-router';
 import CampaignSettings from "./campaignsettings";
 import Pacing from "../pacing/pacing";
@@ -38,25 +38,25 @@ function Campaign({ match }) {
           <h3>Campaign</h3>
           <p>Create campaigns to manage collections of creatives.</p>
         </Cell>
-        <Cell small={ 2 } large={ 2 }>
-          <Button color={ Colors.ALERT } onClick={ del }>Delete</Button>
-        </Cell>
       </Grid>
       <Statistics match={ match } model={ Model.CAMPAIGN }/>
-      <Grid>
-        <Cell small={ 3 } large={ 3 }>
+      <Menu>
+        <MenuItem>
           <Button color={ Colors.SUCCESS } onClick={ changeView.bind(null, 'settings') }>Settings</Button>
-        </Cell>
-        <Cell small={ 3 } large={ 3 }>
+        </MenuItem>
+        <MenuItem>
           <Button color={ Colors.SUCCESS } onClick={ changeView.bind(null, 'pacing') }>Pacing</Button>
-        </Cell>
-        <Cell small={ 3 } large={ 3 }>
+        </MenuItem>
+        <MenuItem>
           <Button color={ Colors.SUCCESS } onClick={ changeView.bind(null, 'targeting') }>Targeting</Button>
-        </Cell>
-        <Cell small={ 3 } large={ 3 }>
+        </MenuItem>
+        <MenuItem>
           <Button color={ Colors.SUCCESS } onClick={ changeView.bind(null, 'creatives') }>Creatives</Button>
-        </Cell>
-      </Grid>
+        </MenuItem>
+        <MenuItem>
+          <Button color={ Colors.ALERT } onClick={ del }>Delete</Button>
+        </MenuItem>
+      </Menu>
       <hr/>
       { view === 'settings' &&
       <CampaignSettings match={ match } model={ Model.CAMPAIGN }/>

@@ -18,10 +18,10 @@ function Targeting({ match, model }) {
     domainBlacklist: [],
     bundleBlacklist: [],
     dealIds: [],
-    mobile: true,
-    desktop: true,
-    inapp: true,
-    ctv: true
+    mobile: false,
+    desktop: false,
+    inapp: false,
+    ctv: false
   });
 
   const addItem = (target, max) => {
@@ -92,7 +92,7 @@ function Targeting({ match, model }) {
             <h5>User Match</h5>
           </Cell>
           <Cell small={ 2 } large={ 2 }>
-            <Switch input={ { defaultChecked: values.userMatch } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, values, setValues, 'userMatch') }/>
+            <Switch input={ { checked: values.userMatch } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, values, setValues, 'userMatch') }/>
           </Cell>
           <Cell small={ 10 } large={ 10 }>
             <p>This item requires a user cookie set by Auction Scout.</p>
@@ -103,7 +103,7 @@ function Targeting({ match, model }) {
             <h5>HTTPS</h5>
           </Cell>
           <Cell small={ 2 } large={ 2 }>
-            <Switch input={ { defaultChecked: values.secure } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, values, setValues, 'secure') }/>
+            <Switch input={ { checked: values.secure } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, values, setValues, 'secure') }/>
           </Cell>
           <Cell small={ 10 } large={ 10 }>
             <p>This item only accepts HTTPS requests.</p>
@@ -115,25 +115,25 @@ function Targeting({ match, model }) {
             <p>This item accepts the following inventory types.</p>
           </Cell>
           <Cell small={ 2 } large={ 2 }>
-            <Switch input={ { defaultChecked: values.desktop } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, values, setValues, 'desktop') }/>
+            <Switch input={ { checked: values.desktop } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, values, setValues, 'desktop') }/>
           </Cell>
           <Cell small={ 10 } large={ 10 }>
             <p>Desktop (PC browsers).</p>
           </Cell>
           <Cell small={ 2 } large={ 2 }>
-            <Switch input={ { defaultChecked: values.mobile } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, values, setValues, 'mobile') }/>
+            <Switch input={ { checked: values.mobile } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, values, setValues, 'mobile') }/>
           </Cell>
           <Cell small={ 10 } large={ 10 }>
             <p>Mobile (iPhone, Android, and tablets)</p>
           </Cell>
           <Cell small={ 2 } large={ 2 }>
-            <Switch input={ { defaultChecked: values.inapp } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, values, setValues, 'inapp') }/>
+            <Switch input={ { checked: values.inapp } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, values, setValues, 'inapp') }/>
           </Cell>
           <Cell small={ 10 } large={ 10 }>
             <p>InApp (iOS, Android, and Windows applications)</p>
           </Cell>
           <Cell small={ 2 } large={ 2 }>
-            <Switch input={ { defaultChecked: values.ctv } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, values, setValues, 'ctv') }/>
+            <Switch input={ { checked: values.ctv } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, values, setValues, 'ctv') }/>
           </Cell>
           <Cell small={ 10 } large={ 10 }>
             <p>Connected TV (Roku, etc)</p>

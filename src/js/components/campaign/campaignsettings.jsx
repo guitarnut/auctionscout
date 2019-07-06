@@ -77,7 +77,7 @@ function CampaignSettings({ match }) {
         </Grid>
         <Grid>
           <Cell small={ 2 } large={ 2 }>
-            <Switch input={ { defaultChecked: values.enabled } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, values, setValues, 'enabled') }/>
+            <Switch input={ { checked: values.enabled } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, values, setValues, 'enabled') }/>
           </Cell>
           <Cell small={ 10 } large={ 10 }>
             <p>This item is currently active.</p>
@@ -120,7 +120,7 @@ function CampaignSettings({ match }) {
             <h5>Sync Users</h5>
           </Cell>
           <Cell small={ 2 } large={ 2 }>
-            <Switch input={ { defaultChecked: values.syncUsers } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, values, setValues, 'syncUsers') }/>
+            <Switch input={ { checked: values.syncUsers } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, values, setValues, 'syncUsers') }/>
           </Cell>
         </Grid>
       </form>

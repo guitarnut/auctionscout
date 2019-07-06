@@ -185,7 +185,7 @@ function Vast({ match }) {
         </Grid>
         <Grid>
           <Cell small={ 2 } large={ 2 }>
-            <Switch input={ { defaultChecked: values.scalable } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, 'scalable') }/>
+            <Switch input={ { checked: values.scalable } } size={ Sizes.SMALL } onChange={ handleSwitchChange.bind(null, 'scalable') }/>
           </Cell>
           <Cell small={ 10 } large={ 10 }>
             <p>This item is scalable.</p>

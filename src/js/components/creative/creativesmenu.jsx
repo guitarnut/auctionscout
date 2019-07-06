@@ -72,7 +72,10 @@ function CreativesMenu() {
         <Cell small={ 2 } large={ 2 }>
           <p><strong>Enabled</strong></p>
         </Cell>
-        <Cell small={ 2 } large={ 2 }>
+        <Cell small={ 1 } large={ 1 }>
+          <p><strong>Requests</strong></p>
+        </Cell>
+        <Cell small={ 1 } large={ 1 }>
           <p><strong>Bids</strong></p>
         </Cell>
         <Cell small={ 2 } large={ 2 }>
@@ -91,7 +94,10 @@ function CreativesMenu() {
             <Cell small={ 2 } large={ 2 }>
               <p>{c.enabled.toString()}</p>
             </Cell>
-            <Cell small={ 2 } large={ 2 }>
+            <Cell small={ 1 } large={ 1 }>
+              <p>{c.statistics.requests}</p>
+            </Cell>
+            <Cell small={ 1 } large={ 1 }>
               <p>{c.statistics.bids}</p>
             </Cell>
             <Cell small={ 2 } large={ 2 }>

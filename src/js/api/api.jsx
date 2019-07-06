@@ -245,6 +245,10 @@ export const api = {
     remove: {
       method: DELETE,
       path: '/api/auctionrecord/' + ID_MACRO + '/delete'
+    },
+    clear: {
+      method: DELETE,
+      path: '/api/auctionrecord/clear'
     }
   },
 

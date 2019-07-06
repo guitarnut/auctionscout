@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Cell, Colors, Grid } from 'react-foundation';
+import { Button, Cell, Colors, Grid, Menu, MenuItem } from 'react-foundation';
 import { Redirect } from 'react-router';
 import CreativeSettings from "./creativesettings";
 import Pacing from "../pacing/pacing";
@@ -58,17 +58,23 @@ function Creative({ match }) {
         </Cell>
       </Grid>
       <Statistics match={ match } model={ Model.CREATIVE }/>
-      <Grid>
-        <Cell small={ 10 } large={ 10 }>
+      <Menu>
+        <MenuItem>
           <Button color={ Colors.SUCCESS } onClick={ changeView.bind(null, 'settings') }>Settings</Button>
+        </MenuItem>
+        <MenuItem>
           <Button color={ Colors.SUCCESS } onClick={ changeView.bind(null, 'pacing') }>Pacing</Button>
+        </MenuItem>
+        <MenuItem>
           <Button color={ Colors.SUCCESS } onClick={ changeView.bind(null, 'targeting') }>Targeting</Button>
+        </MenuItem>
+        <MenuItem>
           <Button color={ Colors.SUCCESS } onClick={ changeView.bind(null, 'asset') }>Asset</Button>
-        </Cell>
-        <Cell small={ 2 } large={ 2 }>
+        </MenuItem>
+        <MenuItem>
           <Button color={ Colors.ALERT } onClick={ del }>Delete</Button>
-        </Cell>
-      </Grid>
+        </MenuItem>
+      </Menu>
       <hr/>
       { view === 'settings' &&
       <CreativeSettings match={ match } model={ Model.CREATIVE }/>
