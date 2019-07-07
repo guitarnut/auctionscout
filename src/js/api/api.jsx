@@ -1,4 +1,5 @@
 import client from 'request';
+import { getAuth, isAuthorized } from "../common/authentication";
 
 export const endpoint = 'http://localhost:8080';
 const GET = 'GET';
@@ -8,7 +9,7 @@ const DELETE = 'DELETE';
 const PATCH = 'PATCH';
 const ID_MACRO = '@__ID__@';
 
-const error = (resp)=> {
+const error = (resp) => {
   return resp.statusCode !== 200 && resp.statusCode !== 204;
 };
 
@@ -19,14 +20,20 @@ const executePOST = (p, data) => {
         url: endpoint + p,
         body: JSON.stringify(data),
         headers: {
-          'Content-Type': 'application/json'
+          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json',
+          'Authorization': getAuth()
         }
       },
       (e, resp, body) => {
-          if (e || error(resp)) {
+        if (e || error(resp)) {
           fail(e);
         } else {
-          success(JSON.parse(body));
+          if (body !== null && body !== '') {
+            success(JSON.parse(body));
+          } else {
+            success();
+          }
         }
       }
     )
@@ -35,7 +42,13 @@ const executePOST = (p, data) => {
 
 const executeGET = (p) => {
   return new Promise((success, fail) => {
-    client.get(endpoint + p,
+    client.get({
+        url: endpoint + p,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Authorization': getAuth()
+        }
+      },
       (e, resp, body) => {
         if (e || error(resp)) {
           fail(e);
@@ -53,7 +66,13 @@ const executeGET = (p) => {
 
 const executeDELETE = (p) => {
   return new Promise((success, fail) => {
-    client.del(endpoint + p,
+    client.del({
+        url: endpoint + p,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Basic': getAuth()
+        }
+      },
       (e, resp, body) => {
         if (e || error(resp)) {
           fail(e);
@@ -86,6 +105,28 @@ export const request = (id, config, data) => {
 };
 
 export const api = {
+  user: {
+    login: {
+      method: POST,
+      path: '/user/login'
+    },
+    create: {
+      method: POST,
+      path: '/user/create'
+    },
+    get: {
+      method: POST,
+      path: '/account/get/'
+    },
+    update: {
+      method: POST,
+      path: '/account/update/'
+    },
+    remove: {
+      method: POST,
+      path: '/account/delete/'
+    }
+  },
   creative: {
     all: {
       method: GET,

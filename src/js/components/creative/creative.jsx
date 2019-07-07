@@ -38,6 +38,7 @@ function Creative({ match }) {
     () => {
       request(match.params.id, api.creative.get, null)
         .then(data => {
+          console.log(typeof data.type);
           setType(data.type)
         })
         .catch(e => {
@@ -87,7 +88,7 @@ function Creative({ match }) {
       }
       { view === 'asset' &&
       <div>
-        { type === '' || type === undefined || type === null &&
+        { type !== CreativeType.DISPLAY && type !== CreativeType.VAST &&
         <Grid>
           <Cell small={ 12 } large={ 12 }>
             <h3>Asset Type</h3>

@@ -138,12 +138,12 @@ function AuctionRecord({ match }) {
         <Cell small={ 12 } large={ 12 }>
           <h5>Response Data</h5>
         </Cell>
-        { values.campaign !== null &&
+        { typeof values.campaign === 'string' &&
         <Cell small={ 6 } large={ 6 }>
           <p><ReactLink to={ `/app/campaign/${values.campaign}` }>View Eligible Campaign</ReactLink></p>
         </Cell>
         }
-        { values.creative !== null &&
+        { typeof values.creative === 'string' &&
         <Cell small={ 6 } large={ 6 }>
           <p><ReactLink to={ `/app/creative/${values.creative}` }>View Eligible Creative</ReactLink></p>
         </Cell>

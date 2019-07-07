@@ -18,7 +18,7 @@ function RouteAuth({ component: Component, ...rest }) {
     isAuthorized() ? (
       <Redirect
         to={ {
-          pathname: '/users',
+          pathname: '/app/dashboard',
           state: { referrer: props.location }
         } }
       />
@@ -35,6 +35,5 @@ function RouteAuth({ component: Component, ...rest }) {
 RouteAuth.propTypes = {
   component: PropTypes.elementType.isRequired
 };
-
 
 export default RouteAuth;

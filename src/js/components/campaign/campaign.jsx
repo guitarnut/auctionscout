@@ -5,9 +5,10 @@ import CampaignSettings from "./campaignsettings";
 import Pacing from "../pacing/pacing";
 import Targeting from "../targeting/targeting";
 import { Model } from "../../const";
-import { request, api } from "../../api/api";
+import { request, api, endpoint } from "../../api/api";
 import CampaignCreatives from "./campaignscreatives";
 import Statistics from "../statistics/statistics";
+import { getAccount } from "../../common/authentication";
 
 function Campaign({ match }) {
 
@@ -37,6 +38,7 @@ function Campaign({ match }) {
         <Cell small={ 10 } large={ 10 }>
           <h3>Campaign</h3>
           <p>Create campaigns to manage collections of creatives.</p>
+          <p>Your endpoint for this campaign is: { endpoint + '/bid/' + getAccount() + '/' + match.params.id }</p>
         </Cell>
       </Grid>
       <Statistics match={ match } model={ Model.CAMPAIGN }/>
