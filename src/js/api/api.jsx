@@ -70,7 +70,7 @@ const executeDELETE = (p) => {
         url: endpoint + p,
         headers: {
           'Access-Control-Allow-Origin': '*',
-          'Basic': getAuth()
+          'Authorization': getAuth()
         }
       },
       (e, resp, body) => {

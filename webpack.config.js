@@ -1,6 +1,7 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   node: {
@@ -75,6 +76,12 @@ module.exports = {
     historyApiFallback: true,
   },
   plugins: [
+    new CopyPlugin([
+      {
+        from: './serve.json',
+        to: './serve.json'
+      }
+    ]),
     new MiniCssExtractPlugin({
       filename: '[name].css'
     }),
