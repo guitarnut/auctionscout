@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.jsx",
   "scripts": {
-    "start": "webpack-dev-server --open --hot --mode development",
-    "build": "webpack --mode production"
+    "start": "NODE_ENV=development webpack-dev-server --open --hot --mode development",
+    "build:production" : "webpack --mode production",
+    "build": "NODE_ENV=production npm run build:production"
   },
   "author": "",
   "license": "ISC",
