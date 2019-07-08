@@ -1,7 +1,7 @@
 import client from 'request';
 import { getAuth, isAuthorized } from "../common/authentication";
 
-export const endpoint = 'http://localhost:8080';
+export const endpoint = 'https://app.auctionscout.net';
 const GET = 'GET';
 const POST = 'POST';
 const PUT = 'PUT';

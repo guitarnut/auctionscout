@@ -23,7 +23,6 @@ function Login({ match }) {
   const handleSubmit = () => {
     request(match.params.id, api.user.login, values)
       .then(data => {
-        console.log(data);
         saveAuth(values.username, values.password, data.id);
         setRedirect(true);
       })

@@ -85,7 +85,7 @@ function Display({ match }) {
       <h3>Display Ad</h3>
       <p>Create HTML and JavaScript markup for client-side rendering.</p>
       <Grid>
-        <Cell small={ 4 } large={ 4 }>
+        <Cell small={ 6 } large={ 6 }>
           <Button color={ Colors.SUCCESS } onClick={ handleSubmit }>Save</Button>
         </Cell>
       </Grid>
@@ -113,7 +113,7 @@ function Display({ match }) {
             <h5>Ad Id</h5>
             <p>A unique identifier for this advertisement.</p>
           </Cell>
-          <Cell small={ 4 } large={ 4 }>
+          <Cell small={ 6 } large={ 6 }>
             <input name={ 'adId' } value={ values.adId } onChange={ handleInputChange }/>
           </Cell>
         </Grid>
@@ -122,7 +122,7 @@ function Display({ match }) {
             <h5>Creative Id</h5>
             <p>A unique identifier for the delivered creative.</p>
           </Cell>
-          <Cell small={ 4 } large={ 4 }>
+          <Cell small={ 6 } large={ 6 }>
             <input name={ 'crid' } value={ values.crid } onChange={ handleInputChange }/>
           </Cell>
         </Grid>
