@@ -32,13 +32,23 @@ function History() {
   };
 
   const deleteAll = () => {
-    request(null, api.auctionrecord.clear, null)
-      .then(() => {
-        setValues({ ...values, auctionrecords: [] })
-      })
-      .catch(e => {
+    if (values.view === 'auctions') {
+      request(null, api.auctionrecord.clear, null)
+        .then(() => {
+          setValues({ ...values, auctionrecords: [] })
+        })
+        .catch(e => {
 
-      })
+        })
+    } else if (values.view === 'vast') {
+      request(null, api.vastrecord.clear, null)
+        .then(() => {
+          setValues({ ...values, vastrecords: [] })
+        })
+        .catch(e => {
+
+        })
+    }
   };
 
   useEffect(() => {
@@ -105,6 +115,7 @@ function History() {
       <div>
         <h5>VAST Records</h5>
         <p>VAST tag results and data.</p>
+        <Button color={ Colors.ALERT } onClick={ deleteAll }>Delete All</Button>
         <Grid>
           <Cell small={ 3 } large={ 3 }>
             <p><strong>Date</strong></p>

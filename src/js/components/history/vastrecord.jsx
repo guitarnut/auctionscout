@@ -7,13 +7,15 @@ function VastRecord({match}) {
 
   const [ values, setValues ] = useState({
     vastName: '',
+    tagId: '',
+    requestId: '',
     ip: '',
     userAgent: '',
     requestTimestamp: 0,
     responseTimestamp: 0,
     cookies: ''
   });
-
+  const [ impressions, setImpressions ] = useState([]);
   const [ redirect, setRedirect ] = useState(false);
 
   const del = () => {
@@ -29,7 +31,15 @@ function VastRecord({match}) {
   useEffect(() => {
     request(match.params.id, api.vastrecord.get, null)
       .then(data => {
-        setValues({...data})
+        setValues({...data});
+        request(data.requestId, api.vastimpressionrecord.all, null)
+          .then(data => {
+            console.log(data);
+            setImpressions(data);
+          })
+          .catch(e => {
+            //
+          })
       })
       .catch(e => {
         //

@@ -293,6 +293,13 @@ export const api = {
     }
   },
 
+  impressionrecord: {
+    all: {
+      method: GET,
+      path: '/api/impressionrecord/' + ID_MACRO + '/all'
+    }
+  },
+
   vastrecord: {
     all: {
       method: GET,
@@ -305,6 +312,17 @@ export const api = {
     remove: {
       method: DELETE,
       path: '/api/vasttagrecord/' + ID_MACRO + '/delete'
+    },
+    clear: {
+      method: DELETE,
+      path: '/api/vasttagrecord/clear'
+    }
+  },
+
+  vastimpressionrecord: {
+    all: {
+      method: GET,
+      path: '/api/impressionrecord/' + ID_MACRO + '/vast/all'
     }
   },
 

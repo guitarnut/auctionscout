@@ -24,6 +24,7 @@ function AuctionRecord({ match }) {
     bidRequestErrors: [],
     markup: ''
   });
+  const [ impressions, setImpressions ] = useState([]);
   const [ redirect, setRedirect ] = useState(false);
 
   const del = () => {
@@ -39,7 +40,15 @@ function AuctionRecord({ match }) {
   useEffect(() => {
     request(match.params.id, api.auctionrecord.get, null)
       .then(data => {
-        setValues({ values, ...data })
+        setValues({ values, ...data });
+        request(data.bidRequestId, api.impressionrecord.all, null)
+          .then(data => {
+            console.log(data);
+            setImpressions(data);
+          })
+          .catch(e => {
+            //
+          })
       })
       .catch(e => {
         //
@@ -109,24 +118,65 @@ function AuctionRecord({ match }) {
         </Cell>
       </Grid>
       <hr/>
+      { Object.keys(values.targetingFailures).length > 0 &&
+      <Fragment>
+        <Grid>
+          <Cell small={ 12 } large={ 12 }>
+            <h5>Targeting Failure</h5>
+          </Cell>
+          <Cell small={ 6 } large={ 6 }>
+            <p><strong>Item</strong></p>
+          </Cell>
+          <Cell small={ 6 } large={ 6 }>
+            <p><strong>Failure</strong></p>
+          </Cell>
+          { Object.keys(values.targetingFailures).map((v, i) => {
+            return (
+              <Fragment key={ i }>
+                <Cell small={ 6 } large={ 6 }>
+                  <p>{ v }</p>
+                </Cell>
+                <Cell small={ 6 } large={ 6 }>
+                  <p>{ values.targetingFailures[ v ] }</p>
+                </Cell>
+              </Fragment>
+            )
+          })
+          }
+        </Grid>
+        <hr/>
+      </Fragment>
+        }
       <Grid>
         <Cell small={ 12 } large={ 12 }>
-          <h5>Targeting Failure</h5>
+          <h5>Impressions</h5>
         </Cell>
         <Cell small={ 6 } large={ 6 }>
-          <p><strong>Item</strong></p>
+          <p><strong>Timestamp</strong></p>
         </Cell>
-        <Cell small={ 6 } large={ 6 }>
-          <p><strong>Failure</strong></p>
+        <Cell small={ 2 } large={ 2 }>
+          <p><strong>Price</strong></p>
         </Cell>
-        { Object.keys(values.targetingFailures).map((v, i) => {
+        <Cell small={ 2 } large={ 2 }>
+          <p><strong>Expired</strong></p>
+        </Cell>
+        <Cell small={ 2 } large={ 2 }>
+          <p><strong>Duplicate</strong></p>
+        </Cell>
+        { impressions.map((v, i) => {
           return (
             <Fragment key={ i }>
               <Cell small={ 6 } large={ 6 }>
-                <p>{ v }</p>
+                <p>{ new Date(v.impressionTimestamp).toLocaleDateString() + ' ' + new Date(v.impressionTimestamp).toLocaleTimeString() }</p>
               </Cell>
-              <Cell small={ 6 } large={ 6 }>
-                <p>{ values.targetingFailures[ v ] }</p>
+              <Cell small={ 2 } large={ 2 }>
+                <p>${ v.cp }</p>
+              </Cell>
+              <Cell small={ 2 } large={ 2 }>
+                <p>{ v.expired.toString() }</p>
+              </Cell>
+              <Cell small={ 2 } large={ 2 }>
+                <p>{ v.duplicate.toString() }</p>
               </Cell>
             </Fragment>
           )
@@ -177,7 +227,6 @@ function AuctionRecord({ match }) {
       </Grid>
     </div>
   )
-
 }
 
 export default AuctionRecord;
